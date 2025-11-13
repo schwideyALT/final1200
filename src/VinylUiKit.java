@@ -39,6 +39,95 @@ public final class VinylUiKit {
         UIManager.put("Spinner.foreground", FG);
         UIManager.put("Button.foreground", Color.WHITE);
         UIManager.put("ScrollPane.border", BorderFactory.createEmptyBorder());
+        // Make menu hover a bit darker
+        Color darkerMenuHover = new Color(75, 75, 75);
+        UIManager.put("Menu.selectionBackground", darkerMenuHover);
+        UIManager.put("MenuItem.selectionBackground", darkerMenuHover);
+        UIManager.put("Menu.selectionForeground", FG);
+        UIManager.put("MenuItem.selectionForeground", FG);
+        UIManager.put("PopupMenu.background", PANEL);
+        UIManager.put("PopupMenu.foreground", FG);
+    }
+
+    public static ImageIcon loadIcon(String s, int w, int h) {
+        try {
+            URL url = VinylUiKit.class.getResource(s);
+            if (url != null) {
+                ImageIcon icon = new ImageIcon(url);
+                return new ImageIcon(icon.getImage().getScaledInstance(w, h, Image.SCALE_SMOOTH));
+            }
+        } catch (Exception ignored) {
+        }
+        return null;
+    }
+
+    // ---------- Rounded text field ----------
+    public static class RoundedTextField extends JTextField {
+        private final int radius;
+        private final Color placeholderColor = new Color(140, 140, 140);
+
+        public RoundedTextField() {
+            this("", 12);
+        }
+        public RoundedTextField(String text) {
+            this(text, 12);
+        }
+        public RoundedTextField(int columns) {
+            this("", 12);
+            setColumns(columns);
+        }
+        public RoundedTextField(String text, int radius) {
+            super(text);
+            this.radius = radius;
+            setOpaque(false);
+            setBackground(new Color(40, 40, 40));
+            setForeground(FG);
+            setCaretColor(FG);
+            setBorder(new EmptyBorder(8, 10, 8, 10));
+            setFont(getFont().deriveFont(Font.PLAIN, getFont().getSize2D()));
+            // Repaint when focus changes to update border color
+            addFocusListener(new FocusAdapter() {
+                @Override public void focusGained(FocusEvent e) { repaint(); }
+                @Override public void focusLost(FocusEvent e) { repaint(); }
+            });
+            // Repaint when text changes so placeholder visibility updates
+            getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
+                public void insertUpdate(javax.swing.event.DocumentEvent e) { repaint(); }
+                public void removeUpdate(javax.swing.event.DocumentEvent e) { repaint(); }
+                public void changedUpdate(javax.swing.event.DocumentEvent e) { repaint(); }
+            });
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            // Background
+            g2.setColor(getBackground());
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), radius * 2, radius * 2);
+
+            // Border
+            g2.setColor(hasFocus() ? new Color(88, 88, 88) : new Color(60, 60, 60));
+            g2.setStroke(new BasicStroke(1f));
+            g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, radius * 2, radius * 2);
+
+            g2.dispose();
+            super.paintComponent(g);
+
+            // Placeholder text support: uses client property "JTextField.placeholderText"
+            String hint = (String) getClientProperty("JTextField.placeholderText");
+            if (hint != null && hint.length() > 0 && getText().isEmpty() && !isFocusOwner()) {
+                Graphics2D gh = (Graphics2D) g.create();
+                gh.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+                gh.setColor(placeholderColor);
+                Insets in = getInsets();
+                FontMetrics fm = gh.getFontMetrics(getFont());
+                int y = (getHeight() - fm.getHeight()) / 2 + fm.getAscent();
+                gh.drawString(hint, in.left, y);
+                gh.dispose();
+            }
+        }
     }
 
     // ---------- Column-banded JTable ----------
@@ -60,6 +149,10 @@ public final class VinylUiKit {
             TableColumnModel tcm = getColumnModel();
             int rowCount = getRowCount();
 
+            // Read hover row index set by the GUI (or -1 if none)
+            Object hr = getClientProperty("hoverRow");
+            int hoverRow = (hr instanceof Integer) ? (Integer) hr : -1;
+
             for (int row = 0; row < rowCount; row++) {
                 int y = getCellRect(row, 0, true).y;
                 int h = getRowHeight(row);
@@ -67,8 +160,15 @@ public final class VinylUiKit {
                 for (int col = 0; col < tcm.getColumnCount(); col++) {
                     totalWidth += tcm.getColumn(col).getWidth();
                 }
+                // base band
                 g2.setColor(row % 2 == 0 ? new Color(40, 40, 40) : new Color(35, 35, 35));
                 g2.fillRoundRect(bandInsetX, y + 1, totalWidth - bandInsetX, h - 2, bandRadius, bandRadius);
+
+                // hover only (no selection darkening)
+                if (row == hoverRow) {
+                    g2.setColor(new Color(45, 45, 45, 225));
+                    g2.fillRoundRect(bandInsetX, y + 1, totalWidth - bandInsetX, h - 2, bandRadius, bandRadius);
+                }
             }
             g2.dispose();
 
@@ -86,8 +186,12 @@ public final class VinylUiKit {
                 protected void paintComponent(Graphics g) {
                     Graphics2D g2 = (Graphics2D) g.create();
                     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                    g2.setColor(HEADER_BG);
-                    g2.fillRoundRect(6, 6, getWidth()-12, getHeight()-6, 12, 12);
+                    // Rounded, gray background for the header row
+                    g2.setColor(BG);
+                    int padX = 6;
+                    int padTop = 6;
+                    int arc = 12;
+                    g2.fillRoundRect(padX, padTop, getWidth() - padX * 2, getHeight() - padTop, arc, arc);
                     g2.dispose();
                     super.paintComponent(g);
                 }
@@ -97,7 +201,69 @@ public final class VinylUiKit {
             l.setBorder(new EmptyBorder(10, 12, 10, 12));
             l.setForeground(SUBFG);
             p.add(l, BorderLayout.CENTER);
+
+            // Do not show any arrow for the "Cover" (model index 1) or "Actions" (model index 10) columns
+            int modelHeaderCol = table.convertColumnIndexToModel(column);
+            if (modelHeaderCol == 1 || modelHeaderCol == 10) {
+                return p;
+            }
+
+            // Determine which column is sorted and its direction
+            Icon arrow;
+            RowSorter<? extends TableModel> rs = table.getRowSorter();
+            boolean isSortedCol = false;
+            boolean ascending = true;
+            if (rs != null && !rs.getSortKeys().isEmpty()) {
+                RowSorter.SortKey key = rs.getSortKeys().get(0);
+                int modelCol = table.convertColumnIndexToModel(column);
+                isSortedCol = key.getColumn() == modelCol;
+                ascending = key.getSortOrder() == SortOrder.ASCENDING;
+            }
+
+            if (isSortedCol) {
+                // Red arrow for the sorted column (up/down by sort order)
+                arrow = new SortArrowIcon(ascending, RED);
+            } else {
+                // Default grey triangle for all other columns (neutral: down)
+                arrow = new SortArrowIcon(false, new Color(120, 120, 120));
+            }
+
+            JLabel arrowLabel = new JLabel(arrow);
+            arrowLabel.setOpaque(false);
+            arrowLabel.setBorder(new EmptyBorder(0, 0, 0, 2)); // right padding
+            p.add(arrowLabel, BorderLayout.EAST);
+
             return p;
+        }
+    }
+    // Small triangle icon for header sort indication
+    private static final class SortArrowIcon implements Icon {
+        private final boolean up;
+        private final Color color;
+        private final int w = 10;
+        private final int h = 8;
+        SortArrowIcon(boolean up, Color color) {
+            this.up = up;
+            this.color = color;
+        }
+        @Override public int getIconWidth() { return w; }
+        @Override public int getIconHeight() { return h; }
+        @Override public void paintIcon(Component c, Graphics g, int x, int y) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(color);
+            Polygon tri = new Polygon();
+            if (up) {
+                tri.addPoint(x + w / 2, y);           // top
+                tri.addPoint(x, y + h);               // bottom-left
+                tri.addPoint(x + w, y + h);           // bottom-right
+            } else {
+                tri.addPoint(x, y);                   // top-left
+                tri.addPoint(x + w, y);               // top-right
+                tri.addPoint(x + w / 2, y + h);       // bottom
+            }
+            g2.fillPolygon(tri);
+            g2.dispose();
         }
     }
 
@@ -131,11 +297,11 @@ public final class VinylUiKit {
             JPanel p = new JPanel(new GridBagLayout()); 
             p.setOpaque(false);
             if (exp) { 
-                JLabel pill = new JLabel("E"); 
-                pill.setForeground(Color.WHITE); 
-                pill.setOpaque(true); 
-                pill.setBackground(new Color(180, 30, 30)); 
-                pill.setBorder(new EmptyBorder(3, 10, 3, 10)); 
+                JLabel pill = new JLabel("E");
+                pill.setOpaque(false);
+                pill.setFont(pill.getFont().deriveFont(Font.PLAIN, 16f));
+                pill.setForeground(new Color(180, 30, 30));
+
                 p.add(pill); 
             }
             return p;
@@ -153,7 +319,7 @@ public final class VinylUiKit {
         private int rating; private JPanel panel;
         @Override public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
             rating = value instanceof Integer ? (Integer) value : 0;
-            panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 2, 0)); panel.setOpaque(false);
+            panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 2, 15)); panel.setOpaque(false);
             for (int i = 1; i <= 5; i++) { final int idx = i; JLabel star = new JLabel(i <= rating ? "★" : "☆"); star.setForeground(new Color(255, 204, 64)); star.setFont(star.getFont().deriveFont(Font.PLAIN, 18f)); star.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); star.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { rating = idx; stopCellEditing(); } }); panel.add(star); }
             return panel;
         }
@@ -169,6 +335,39 @@ public final class VinylUiKit {
         @Override protected void paintComponent(Graphics g) { Graphics2D g2 = (Graphics2D) g.create(); g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON); g2.setColor(over ? hover : base); g2.fillRoundRect(0, 0, getWidth(), getHeight(), radius*2, radius*2); g2.dispose(); super.paintComponent(g); }
     }
 
+    // ---------- Rounded scroll pane for tables ----------
+    public static class RoundedScrollPane extends JScrollPane {
+        private final int radius;
+        private final Color bg;
+        private final Color borderColor;
+
+        public RoundedScrollPane(Component view, int radius) {
+            this(view, radius, PANEL, new Color(60, 60, 60));
+        }
+
+        public RoundedScrollPane(Component view, int radius, Color bg, Color borderColor) {
+            super(view);
+            this.radius = radius;
+            this.bg = bg;
+            this.borderColor = borderColor;
+            setBorder(BorderFactory.createEmptyBorder());
+            setOpaque(false);
+            getViewport().setOpaque(false);
+            // Make column header transparent so rounded top corners are visible
+            if (getColumnHeader() != null) {
+                getColumnHeader().setOpaque(false);
+            }
+            setBackground(new Color(0, 0, 0, 0));
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            // Make the scroll pane fully transparent: no background, no border.
+            // Children (viewport/table) will paint themselves.
+            // Intentionally do nothing here.
+        }
+    }
+
     // ---------- Minimal scrollbars ----------
     public static final class MinimalScrollBarUI extends BasicScrollBarUI {
         @Override protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {}
@@ -179,20 +378,7 @@ public final class VinylUiKit {
         @Override protected JButton createIncreaseButton(int orientation) { return zero(); }
         private JButton zero() { JButton b = new JButton(); b.setPreferredSize(new Dimension(0,0)); b.setOpaque(false); b.setContentAreaFilled(false); b.setBorder(null); return b; }
         @Override public Dimension getPreferredSize(JComponent c) { return new Dimension(0,0); }
+
     }
 
-    // ---------- Icon loading ----------
-    public static ImageIcon loadIcon(String path, int width, int height) {
-        try {
-            URL resource = VinylUiKit.class.getResource(path);
-            if (resource != null) {
-                ImageIcon icon = new ImageIcon(resource);
-                Image scaled = icon.getImage().getScaledInstance(width, height, Image.SCALE_SMOOTH);
-                return new ImageIcon(scaled);
-            }
-        } catch (Exception e) {
-            System.err.println("Failed to load icon: " + path);
-        }
-        return null;
-    }
 }

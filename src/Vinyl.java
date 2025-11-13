@@ -78,10 +78,10 @@ public final class Vinyl {
             Graphics2D g = img.createGraphics();
             g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
             g.setColor(new Color(60, 60, 60));
-            g.fillRoundRect(0, 0, w, h, 8, 8);
+            g.fillRoundRect(0, 0, w, h, 16, 16);
             g.setColor(new Color(90, 90, 90));
             int pad = Math.max(2, w / 5);
-            g.fillRoundRect(pad, pad, Math.max(1, w - pad * 2), Math.max(1, h - pad * 2), 6, 6);
+            g.fillRoundRect(pad, pad, Math.max(4, w - pad * 2), Math.max(4, h - pad * 2), 6, 6);
             g.dispose();
             return new ImageIcon(img);
         }
@@ -92,6 +92,13 @@ public final class Vinyl {
         private final String[] cols = {"ID","Cover","Title","Artist","Album","Genre","BPM","Length","Explicit","Rating","Actions"};
         private final Class<?>[] types = {Integer.class, ImageIcon.class, String.class, String.class, String.class, String.class, Integer.class, String.class, Boolean.class, Integer.class, Object.class};
         private final List<Song> rows = new ArrayList<>();
+
+        // Simple change listeners so GUI can auto-save
+        public interface ChangeListener { void modelChanged(); }
+        private final List<ChangeListener> listeners = new ArrayList<>();
+        public void addChangeListener(ChangeListener l) { if (l != null && !listeners.contains(l)) listeners.add(l); }
+        public void removeChangeListener(ChangeListener l) { listeners.remove(l); }
+        private void notifyChanged() { for (ChangeListener l : new ArrayList<>(listeners)) l.modelChanged(); }
 
         @Override public int getRowCount() { return rows.size(); }
         @Override public int getColumnCount() { return cols.length; }
@@ -116,15 +123,44 @@ public final class Vinyl {
             }
             return null;
         }
-        @Override public void setValueAt(Object val, int r, int c) { if (c == 9 && val instanceof Integer) rows.get(r).rating = (Integer) val; }
+        @Override public void setValueAt(Object val, int r, int c) {
+            if (c == 9 && val instanceof Integer) {
+                rows.get(r).rating = (Integer) val;
+                notifyChanged();
+            }
+        }
 
-        public void addSong(Song s) { rows.add(s); int i = rows.size() - 1; fireTableRowsInserted(i, i); }
-        public void removeAt(int modelRow) { if (modelRow >= 0 && modelRow < rows.size()) { rows.remove(modelRow); fireTableRowsDeleted(modelRow, modelRow); } }
+        public void addSong(Song s) {
+            rows.add(s);
+            int i = rows.size() - 1;
+            fireTableRowsInserted(i, i);
+            notifyChanged();
+        }
+        public void removeAt(int modelRow) {
+            if (modelRow >= 0 && modelRow < rows.size()) {
+                rows.remove(modelRow);
+                fireTableRowsDeleted(modelRow, modelRow);
+                notifyChanged();
+            }
+        }
         public int indexOf(Song s) { return rows.indexOf(s); }
         public Song getSong(int modelRow) { return rows.get(modelRow); }
         public List<Song> getAll() { return new ArrayList<>(rows); }
-        public void setSongs(List<Song> list) { rows.clear(); rows.addAll(list); fireTableDataChanged(); }
+        public void setSongs(List<Song> list) {
+            rows.clear();
+            rows.addAll(list);
+            fireTableDataChanged();
+            notifyChanged();
+        }
         public int nextId() { int max = 0; for (Song s : rows) max = Math.max(max, s.id); return max + 1; }
+
+        // Call this after mutating a song object in-place (e.g., from a dialog)
+        public void songUpdated(int row) {
+            if (row >= 0 && row < rows.size()) {
+                fireTableRowsUpdated(row, row);
+                notifyChanged();
+            }
+        }
     }
 
     // ---------- XML store ----------
