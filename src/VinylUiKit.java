@@ -1,17 +1,68 @@
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicMenuItemUI;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.InputStream;
 import java.net.URL;
+import javax.swing.border.Border;
+import javax.swing.plaf.basic.BasicCheckBoxMenuItemUI;
+import java.awt.geom.RoundRectangle2D;
+import javax.swing.plaf.basic.BasicPopupMenuUI;
+import java.util.ArrayList;
+import javax.swing.Popup;
+import javax.swing.PopupFactory;
 
 import static javax.swing.SwingConstants.LEFT;
 
 // Shared UI utilities for the Vinyl app.
 // Colors, table with column bands, renderers, rating editor, buttons, header renderer, scrollbars.
 public final class VinylUiKit {
+    // Clickable star bar for dialog
+    static class StarBar extends JPanel {
+        private int value;
+        private final java.util.List<JLabel> stars = new ArrayList<>();
+
+        StarBar(int initial) {
+            super(new FlowLayout(FlowLayout.LEFT, 4, 0));
+            setOpaque(false);
+            setValue(initial);
+            for (int i = 1; i <= 5; i++) {
+                final int idx = i;
+                JLabel star = new JLabel("☆");
+                // Use Wingdine-based star font for dialog rating as well
+                star.setFont(FontManager.starFont(22f));
+                // Match table stars: all red
+                star.setForeground(VinylUiKit.RED);
+                star.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                star.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        setValue(idx);
+                    }
+                });
+                stars.add(star);
+                add(star);
+            }
+            refresh();
+        }
+
+        void setValue(int v) {
+            value = Math.max(0, Math.min(5, v));
+            refresh();
+        }
+
+        int getValue() {
+            return value;
+        }
+
+        private void refresh() {
+            for (int i = 0; i < stars.size(); i++) {
+                stars.get(i).setText(i < value ? "★" : "☆");
+            }
+        }
+    }
     private VinylUiKit() {}
 
     // ---------- Colors ----------
@@ -23,31 +74,301 @@ public final class VinylUiKit {
     public static final Color RED = new Color(210, 54, 54);
     public static final Color RED_HOVER = new Color(230, 76, 76);
 
+    // Default font to use for non-SF text elements
+    public static final Font DEFAULT_STAR_FONT = new JLabel().getFont();
+
+    /**
+     * Try to create a Wingdings font at the given size.
+     * If Wingdings is not available on this system, fall back to DEFAULT_STAR_FONT.
+     */
+    public static Font wingdings(float size) {
+        Font f = new Font("Wingdings", Font.PLAIN, (int) size);
+        if (!"Wingdings".equalsIgnoreCase(f.getFamily())) {
+            // System substituted a different family; fall back
+            return DEFAULT_STAR_FONT.deriveFont(Font.PLAIN, size);
+        }
+        return f;
+    }
+
     // ---------- Defaults ----------
     public static void setSystemDefaults() {
-        try { UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); } catch (Exception ignored) {}
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ignored) {
+        }
+
+        // Prefer lightweight popups globally so transparent, rounded corners
+        // blend with our dark background instead of a heavyweight window.
+        JPopupMenu.setDefaultLightWeightPopupEnabled(true);
+
+
+
+        // Core backgrounds
         UIManager.put("Panel.background", PANEL);
         UIManager.put("OptionPane.background", PANEL);
         UIManager.put("OptionPane.messageForeground", FG);
-        UIManager.put("TextField.background", new Color(40, 40, 40));
-        UIManager.put("TextField.foreground", FG);
-        UIManager.put("TextField.caretForeground", FG);
-        UIManager.put("TextField.border", BorderFactory.createLineBorder(new Color(60, 60, 60)));
-        UIManager.put("ComboBox.background", new Color(40, 40, 40));
-        UIManager.put("ComboBox.foreground", FG);
-        UIManager.put("Spinner.background", new Color(40, 40, 40));
-        UIManager.put("Spinner.foreground", FG);
-        UIManager.put("Button.foreground", Color.WHITE);
-        UIManager.put("ScrollPane.border", BorderFactory.createEmptyBorder());
-        // Make menu hover a bit darker
-        Color darkerMenuHover = new Color(75, 75, 75);
-        UIManager.put("Menu.selectionBackground", darkerMenuHover);
-        UIManager.put("MenuItem.selectionBackground", darkerMenuHover);
+
+        // Text fields ...
+        // ...
+
+        // Menus and menu items
+        Color menuBg = new Color(40, 40, 40);
+        Color menuSelBg = new Color(70, 70, 70);
+
+        UIManager.put("Menu.background", menuBg);
+        UIManager.put("Menu.foreground", FG);
+        UIManager.put("Menu.opaque", Boolean.FALSE);
+
+        UIManager.put("MenuItem.background", menuBg);
+        UIManager.put("MenuItem.foreground", FG);
+        UIManager.put("MenuItem.opaque", Boolean.FALSE);
+
+        UIManager.put("Menu.selectionBackground", menuSelBg);
+        UIManager.put("MenuItem.selectionBackground", menuSelBg);
         UIManager.put("Menu.selectionForeground", FG);
         UIManager.put("MenuItem.selectionForeground", FG);
-        UIManager.put("PopupMenu.background", PANEL);
+
+        // Checkmark menu items (JCheckBoxMenuItem)
+        UIManager.put("CheckBoxMenuItem.background", menuBg);
+        UIManager.put("CheckBoxMenuItem.foreground", Color.WHITE);
+        //UIManager.put("CheckBoxMenuItem.selectionBackground", menuSelBg);
+        UIManager.put("CheckBoxMenuItem.selectionForeground", Color.WHITE);
+        UIManager.put("CheckBoxMenuItem.opaque", Boolean.FALSE);
+        UIManager.put("CheckBoxMenuItem.borderPainted", Boolean.FALSE);
+        // Use a custom red check icon that only paints when selected
+        UIManager.put("CheckBoxMenuItem.checkIcon", new RedCheckIcon(RED));
+
+        // Popup menu defaults
+        UIManager.put("PopupMenu.background", menuBg);
         UIManager.put("PopupMenu.foreground", FG);
+        UIManager.put("PopupMenu.border", BorderFactory.createEmptyBorder()); // no LAF border
+        UIManager.put("Popup.dropShadowPainted", Boolean.FALSE);
+
+        JPopupMenu.setDefaultLightWeightPopupEnabled(true);
     }
+
+    // ---------- Rounded popup menu ----------
+    // Use this class when you create popups for a fully rounded, opaque dark background.
+    public static final class RoundedPopupMenu extends JPopupMenu {
+        private final int radius = 12;
+        private final Color fill = new Color(34, 34, 34);
+        // make stroke fully transparent so no visible outline
+        private final Color stroke = new Color(0, 0, 0, 0);
+
+        public RoundedPopupMenu() {
+            setOpaque(false);
+            setBorder(new EmptyBorder(6, 8, 6, 8));
+            setBorderPainted(false);
+            setBackground(new Color(0, 0, 0, 0));
+            setForeground(FG);
+            setLightWeightPopupEnabled(true);
+        }
+
+
+        @Override
+        public void paint(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+
+            int w = getWidth();
+            int h = getHeight();
+
+            // 1) Clear the whole rectangular area
+            g2.setComposite(AlphaComposite.Clear);
+            g2.fillRect(0, 0, w, h);
+            g2.setComposite(AlphaComposite.SrcOver);
+
+            // 2) Normal painting again
+            g2.setComposite(AlphaComposite.SrcOver);
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                                RenderingHints.VALUE_ANTIALIAS_ON);
+
+            // Rounded shape
+            RoundRectangle2D shape =
+                    new RoundRectangle2D.Float(0, 0, w - 1, h - 1, radius * 2, radius * 2);
+
+            // 3) Fill rounded dark background
+            g2.setColor(fill);
+            g2.fill(shape);
+
+            // 4) Optional stroke (transparent now)
+            if (stroke.getAlpha() > 0) {
+                g2.setColor(stroke);
+                g2.setStroke(new BasicStroke(1f));
+                g2.draw(shape);
+            }
+
+            // 5) Clip all menu content to the rounded shape
+            Shape oldClip = g2.getClip();
+            g2.setClip(shape);
+            super.paint(g2);   // let UI paint items inside the clip
+            g2.setClip(oldClip);
+
+            g2.dispose();
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            // nothing; all background is handled in paint()
+        }
+    }
+
+
+    // Rounded border that also paints a filled background, used when you need to
+    // restyle an existing JPopupMenu through stylePopup.
+    // Rounded border that also paints a filled background, used when you need to
+// restyle an existing JPopupMenu through stylePopup.
+    private static final class RoundedPopupBorder implements Border {
+        private final int radius;
+        private final Color fill;
+        private final Color stroke;
+        private final Insets insets;
+
+        RoundedPopupBorder(int radius, Color fill, Color stroke) {
+            this.radius = radius;
+            this.fill = fill;
+            // transparent stroke if you want no visible outline
+            this.stroke = stroke; // or new Color(0, 0, 0, 0) for no border line
+            this.insets = new Insets(6, 8, 6, 8);
+        }
+
+        @Override
+        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            g2.setColor(fill);
+            g2.fillRoundRect(x, y, width - 1, height - 1, radius * 2, radius * 2);
+
+            if (stroke.getAlpha() > 0) {
+                g2.setColor(stroke);
+                g2.setStroke(new BasicStroke(1f));
+                g2.drawRoundRect(x, y, width - 1, height - 1, radius * 2, radius * 2);
+            }
+
+            g2.dispose();
+
+            if (c instanceof JComponent jc) {
+                jc.setOpaque(false);
+                jc.setBackground(new Color(0, 0, 0, 0));
+            }
+        }
+
+        @Override
+        public Insets getBorderInsets(Component c) {
+            return insets;
+        }
+
+        @Override
+        public boolean isBorderOpaque() {
+            return false;
+        }
+    }
+
+
+    // Rounded menu item for dropdowns and popup menus, opaque dark background and white text
+    public static class RoundedMenuItem extends JMenuItem {
+        private final int radius = 10;
+
+        public RoundedMenuItem(String text) {
+            super(text);
+            init();
+        }
+
+        public RoundedMenuItem(Action action) {
+            super(action);
+            init();
+        }
+
+        private void init() {
+            setOpaque(false);
+            setForeground(FG);
+            setBackground(new Color(40, 40, 40));
+            setBorder(new EmptyBorder(6, 12, 6, 12));
+            setUI(new BasicMenuItemUI() {
+                @Override
+                public void paint(Graphics g, JComponent c) {
+                    JMenuItem item = (JMenuItem) c;
+                    Graphics2D g2 = (Graphics2D) g.create();
+                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                    int w = c.getWidth();
+                    int h = c.getHeight();
+
+                    ButtonModel model = item.getModel();
+                    Color bg = new Color(40, 40, 40);
+                    if (model.isArmed() || model.isSelected()) {
+                        bg = new Color(70, 70, 70);
+                    }
+
+                    g2.setColor(bg);
+                    g2.fillRoundRect(0, 0, w - 1, h - 1, radius * 2, radius * 2);
+
+                    g2.setColor(item.getForeground());
+                    g2.setFont(item.getFont());
+                    FontMetrics fm = g2.getFontMetrics();
+                    String text = item.getText();
+                    Icon icon = item.getIcon();
+
+                    int textX = 12;
+                    int iconY = (h - (icon == null ? 0 : icon.getIconHeight())) / 2;
+                    int textY = (h - fm.getHeight()) / 2 + fm.getAscent();
+
+                    if (icon != null) {
+                        int iconX = 8;
+                        icon.paintIcon(c, g2, iconX, iconY);
+                        textX = iconX + icon.getIconWidth() + 6;
+                    }
+
+                    if (text != null && !text.isEmpty()) {
+                        g2.drawString(text, textX, textY);
+                    }
+
+                    g2.dispose();
+                }
+            });
+        }
+    }
+
+    private static final class RedCheckIcon implements Icon {
+        private final int size = 10;
+        private final Color color;
+
+        RedCheckIcon(Color color) {
+            this.color = color;
+        }
+
+        @Override public int getIconWidth() { return size; }
+        @Override public int getIconHeight() { return size; }
+
+        @Override
+        public void paintIcon(Component c, Graphics g, int x, int y) {
+            // Only paint the check when the item is selected
+            if (c instanceof JCheckBoxMenuItem item) {
+                ButtonModel model = item.getModel();
+                if (!model.isSelected()) {
+                    return; // no checkmark when not selected
+                }
+            }
+
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setStroke(new BasicStroke(2f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+            g2.setColor(color);
+
+            int x1 = x + 2;
+            int y1 = y + size / 2;
+            int x2 = x + size / 2;
+            int y2 = y + size - 2;
+            int x3 = x + size - 2;
+            int y3 = y + 2;
+
+            g2.drawLine(x1, y1, x2, y2);
+            g2.drawLine(x2, y2, x3, y3);
+
+            g2.dispose();
+        }
+    }
+
 
     public static ImageIcon loadIcon(String s, int w, int h) {
         try {
@@ -69,13 +390,16 @@ public final class VinylUiKit {
         public RoundedTextField() {
             this("", 12);
         }
+
         public RoundedTextField(String text) {
             this(text, 12);
         }
+
         public RoundedTextField(int columns) {
             this("", 12);
             setColumns(columns);
         }
+
         public RoundedTextField(String text, int radius) {
             super(text);
             this.radius = radius;
@@ -85,12 +409,12 @@ public final class VinylUiKit {
             setCaretColor(FG);
             setBorder(new EmptyBorder(8, 10, 8, 10));
             setFont(getFont().deriveFont(Font.PLAIN, getFont().getSize2D()));
-            // Repaint when focus changes to update border color
+
             addFocusListener(new FocusAdapter() {
                 @Override public void focusGained(FocusEvent e) { repaint(); }
                 @Override public void focusLost(FocusEvent e) { repaint(); }
             });
-            // Repaint when text changes so placeholder visibility updates
+
             getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
                 public void insertUpdate(javax.swing.event.DocumentEvent e) { repaint(); }
                 public void removeUpdate(javax.swing.event.DocumentEvent e) { repaint(); }
@@ -103,11 +427,9 @@ public final class VinylUiKit {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-            // Background
             g2.setColor(getBackground());
             g2.fillRoundRect(0, 0, getWidth(), getHeight(), radius * 2, radius * 2);
 
-            // Border
             g2.setColor(hasFocus() ? new Color(88, 88, 88) : new Color(60, 60, 60));
             g2.setStroke(new BasicStroke(1f));
             g2.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, radius * 2, radius * 2);
@@ -115,7 +437,6 @@ public final class VinylUiKit {
             g2.dispose();
             super.paintComponent(g);
 
-            // Placeholder text support: uses client property "JTextField.placeholderText"
             String hint = (String) getClientProperty("JTextField.placeholderText");
             if (hint != null && hint.length() > 0 && getText().isEmpty() && !isFocusOwner()) {
                 Graphics2D gh = (Graphics2D) g.create();
@@ -129,6 +450,65 @@ public final class VinylUiKit {
             }
         }
     }
+
+    // Apply rounded dark styling to any JPopupMenu that you already created
+    public static void stylePopup(JPopupMenu popup) {
+        if (popup == null) return;
+        JPopupMenu.setDefaultLightWeightPopupEnabled(true);
+        popup.setLightWeightPopupEnabled(true);
+
+        // We no longer rely on true transparency; use an opaque popup
+        popup.setOpaque(true);
+        popup.setBackground(BG); // match app background
+        popup.setBorderPainted(false);
+        popup.setBorder(BorderFactory.createEmptyBorder(6, 8, 6, 8));
+        popup.setForeground(FG);
+
+        // Custom UI delegate that paints our rounded dark background
+        popup.setUI(new BasicPopupMenuUI() {
+            @Override
+            public void paint(Graphics g, JComponent c) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+                int w = c.getWidth();
+                int h = c.getHeight();
+                int radius = 12;
+
+                // 1) Clear the area with the app background color instead of full transparency
+                g2.setComposite(AlphaComposite.SrcOver);
+                g2.setColor(BG); // or PANEL, depending on what blends best
+                g2.fillRect(0, 0, w, h);
+
+                // Define rounded clip
+                RoundRectangle2D clipShape =
+                        new RoundRectangle2D.Float(0, 0, w - 1, h - 1, radius * 2, radius * 2);
+
+                // 2) Fill rounded dark background
+                g2.setColor(new Color(34, 34, 34));
+                g2.fill(clipShape);
+
+                // Optional stroke (kept transparent)
+                Color stroke = new Color(0, 0, 0, 0);
+                if (stroke.getAlpha() > 0) {
+                    g2.setColor(stroke);
+                    g2.setStroke(new BasicStroke(1f));
+                    g2.draw(clipShape);
+                }
+
+                // 3) Clip all menu content to the rounded shape
+                Shape oldClip = g2.getClip();
+                g2.setClip(clipShape);
+                super.paint(g2, c);
+                g2.setClip(oldClip);
+
+                g2.dispose();
+            }
+        });
+
+        popup.putClientProperty("JPopupMenu.firePopupMenuCanceledOnExit", Boolean.TRUE);
+    }
+
 
     // ---------- Column-banded JTable ----------
     public static final class ColumnBandTable extends JTable {
@@ -149,7 +529,6 @@ public final class VinylUiKit {
             TableColumnModel tcm = getColumnModel();
             int rowCount = getRowCount();
 
-            // Read hover row index set by the GUI (or -1 if none)
             Object hr = getClientProperty("hoverRow");
             int hoverRow = (hr instanceof Integer) ? (Integer) hr : -1;
 
@@ -160,11 +539,9 @@ public final class VinylUiKit {
                 for (int col = 0; col < tcm.getColumnCount(); col++) {
                     totalWidth += tcm.getColumn(col).getWidth();
                 }
-                // base band
-                g2.setColor(row % 2 == 0 ? new Color(40, 40, 40) : new Color(35, 35, 35));
+                g2.setColor(row % 2 == 0 ? new Color(30,30,30) : BG);
                 g2.fillRoundRect(bandInsetX, y + 1, totalWidth - bandInsetX, h - 2, bandRadius, bandRadius);
 
-                // hover only (no selection darkening)
                 if (row == hoverRow) {
                     g2.setColor(new Color(45, 45, 45, 225));
                     g2.fillRoundRect(bandInsetX, y + 1, totalWidth - bandInsetX, h - 2, bandRadius, bandRadius);
@@ -175,6 +552,8 @@ public final class VinylUiKit {
             super.paintComponent(g);
         }
     }
+
+    // Dummy text renderer placeholder to keep this file compiling in isolation
 
     // ---------- Header renderer ----------
     public static final class HeaderRenderer extends DefaultTableCellRenderer {
@@ -202,9 +581,9 @@ public final class VinylUiKit {
             l.setForeground(SUBFG);
             p.add(l, BorderLayout.CENTER);
 
-            // Do not show any arrow for the "Cover" (model index 1) or "Actions" (model index 10) columns
+            // Do not show any arrow for the "Cover" (model index 1) or "Actions" (model index 12) columns
             int modelHeaderCol = table.convertColumnIndexToModel(column);
-            if (modelHeaderCol == 1 || modelHeaderCol == 10) {
+            if (modelHeaderCol == 1 || modelHeaderCol == 12) {
                 return p;
             }
 
@@ -224,7 +603,7 @@ public final class VinylUiKit {
                 // Red arrow for the sorted column (up/down by sort order)
                 arrow = new SortArrowIcon(ascending, RED);
             } else {
-                // Default grey triangle for all other columns (neutral: down)
+                // Default gray triangle for all other columns (neutral: down)
                 arrow = new SortArrowIcon(false, new Color(120, 120, 120));
             }
 
@@ -291,39 +670,77 @@ public final class VinylUiKit {
             p.add(l); return p;
         }
     }
+
+    // render the RED E for the Explicit
     public static final class ExplicitRenderer extends DefaultTableCellRenderer {
         @Override public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             boolean exp = value instanceof Boolean && (Boolean) value;
-            JPanel p = new JPanel(new GridBagLayout()); 
+            JPanel p = new JPanel(new GridBagLayout());
             p.setOpaque(false);
-            if (exp) { 
+            if (exp) {
                 JLabel pill = new JLabel("E");
                 pill.setOpaque(false);
                 pill.setFont(pill.getFont().deriveFont(Font.PLAIN, 16f));
                 pill.setForeground(new Color(180, 30, 30));
 
-                p.add(pill); 
+                p.add(pill);
             }
             return p;
         }
     }
+
+    // ---------- Explicit, Rating ----------
     public static final class RatingRenderer extends DefaultTableCellRenderer {
         @Override public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
             int rating = value instanceof Integer ? (Integer) value : 0;
-            JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER, 2, 15)); p.setOpaque(false);
-            for (int i = 1; i <= 5; i++) { JLabel star = new JLabel(i <= rating ? "★" : "☆"); star.setForeground(new Color(255, 204, 64)); star.setFont(star.getFont().deriveFont(Font.PLAIN, 18f)); p.add(star); }
+            JPanel p = new JPanel(new FlowLayout(FlowLayout.CENTER, 2, 15));
+            p.setOpaque(false);
+            for (int i = 1; i <= 5; i++) {
+                JLabel star = new JLabel(i <= rating ? "★" : "☆");
+                // Use Wingdine-based star font
+                star.setFont(FontManager.starFont(18f));
+                // All stars red
+                star.setForeground(RED);
+                p.add(star);
+            }
             return p;
         }
     }
+
+    // ---------- Explicit, Rating ----------
     public static final class RatingEditor extends AbstractCellEditor implements TableCellEditor {
-        private int rating; private JPanel panel;
-        @Override public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
+        private int rating;
+        private JPanel panel;
+
+        @Override
+        public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
             rating = value instanceof Integer ? (Integer) value : 0;
-            panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 2, 15)); panel.setOpaque(false);
-            for (int i = 1; i <= 5; i++) { final int idx = i; JLabel star = new JLabel(i <= rating ? "★" : "☆"); star.setForeground(new Color(255, 204, 64)); star.setFont(star.getFont().deriveFont(Font.PLAIN, 18f)); star.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); star.addMouseListener(new MouseAdapter() { public void mouseClicked(MouseEvent e) { rating = idx; stopCellEditing(); } }); panel.add(star); }
+            panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 2, 15));
+            panel.setOpaque(false);
+            for (int i = 1; i <= 5; i++) {
+                final int idx = i;
+                JLabel star = new JLabel(i <= rating ? "★" : "☆");
+                // Use Wingdine-based star font
+                star.setFont(FontManager.starFont(18f));
+                // All stars red
+                star.setForeground(RED);
+                star.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                star.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mouseClicked(MouseEvent e) {
+                        rating = idx;
+                        stopCellEditing();
+                    }
+                });
+                panel.add(star);
+            }
             return panel;
         }
-        @Override public Object getCellEditorValue() { return rating; }
+
+        @Override
+        public Object getCellEditorValue() {
+            return rating;
+        }
     }
 
     // ---------- Buttons ----------

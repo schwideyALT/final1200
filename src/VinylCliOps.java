@@ -32,20 +32,24 @@ public final class VinylCliOps {
         }
     }
 
-    // ---------- Incrementing ID generator ----------
+    // ---------- Id generator ----------
     public static class IdGen {
         private int next = 1;
         public int nextId() { return next++; }
     }
-
+    
+    
     // ---------- Parsing helpers ----------
     public static Integer parseIntOpt(String s) {
         try { return s == null || s.trim().isEmpty() ? null : Integer.parseInt(s.trim()); }
         catch (Exception e) { return null; }
     }
+
     public static int parseIntOr(String s, int d) {
         try { return Integer.parseInt(s.trim()); } catch (Exception e) { return d; }
     }
+
+    // change int for rating to 1-5
     public static Integer clampRating15(Integer v) {
         if (v == null) return null;
         return Math.max(1, Math.min(5, v));
@@ -59,15 +63,22 @@ public final class VinylCliOps {
         inv.add(r);
         return r;
     }
-
+    // find record with given id in the list
     public static Record findById(List<Record> inv, int id) {
         for (Record r : inv) if (r.id == id) return r; return null;
     }
 
+
+    // remove record with given id from the list
     public static void remove(List<Record> inv, int id) {
         Iterator<Record> it = inv.iterator();
         while (it.hasNext()) if (it.next().id == id) { it.remove(); return; }
     }
+
+    /**
+     * Sells (decrements inventory) for the song with the given id.
+     * Usage: sell <id> <count>
+     */
 
     // ---------- Printing ----------
     public static void printTable(List<Record> inv) {
@@ -88,7 +99,8 @@ public final class VinylCliOps {
                     r.quantity);
         }
     }
-
+    
+    // method to cut a string to a given length
     public static String cut(String s, int n) {
         if (s == null) return "";
         return s.length()<=n? s : s.substring(0, Math.max(0, n-1)) + "…";

@@ -1,0 +1,1303 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<songs>
+    <song id="1">
+        <title>Lost In Tokyo</title>
+        <artist>Kavinsky</artist>
+        <album>Nightcall</album>
+        <genre>Synthwave</genre>
+        <bpm>92</bpm>
+        <length>242</length>
+        <explicit>true</explicit>
+        <rating>0</rating>
+        <cover/>
+        <price>79.97</price>
+        <count>2</count>
+    </song>
+    <song id="2">
+        <title>Rose Rouge</title>
+        <artist>St Germain</artist>
+        <album>Tourist</album>
+        <genre>House</genre>
+        <bpm>124</bpm>
+        <length>446</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="3">
+        <title>Brazil</title>
+        <artist>Declan McKenna</artist>
+        <album>What Do You Think About The Car?</album>
+        <genre>Indie</genre>
+        <bpm>120</bpm>
+        <length>250</length>
+        <explicit>false</explicit>
+        <rating>3</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="4">
+        <title>Blinding Lights</title>
+        <artist>The Weeknd</artist>
+        <album>After Hours</album>
+        <genre>Pop</genre>
+        <bpm>171</bpm>
+        <length>200</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="5">
+        <title>Save Your Tears</title>
+        <artist>The Weeknd</artist>
+        <album>After Hours</album>
+        <genre>Pop</genre>
+        <bpm>118</bpm>
+        <length>215</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="6">
+        <title>Levitating</title>
+        <artist>Dua Lipa</artist>
+        <album>Future Nostalgia</album>
+        <genre>Pop</genre>
+        <bpm>103</bpm>
+        <length>203</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="7">
+        <title>Don't Start Now</title>
+        <artist>Dua Lipa</artist>
+        <album>Future Nostalgia</album>
+        <genre>Pop</genre>
+        <bpm>124</bpm>
+        <length>183</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="8">
+        <title>Get Lucky</title>
+        <artist>Daft Punk</artist>
+        <album>Random Access Memories</album>
+        <genre>Disco</genre>
+        <bpm>116</bpm>
+        <length>248</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="9">
+        <title>One More Time</title>
+        <artist>Daft Punk</artist>
+        <album>Discovery</album>
+        <genre>House</genre>
+        <bpm>123</bpm>
+        <length>320</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="10">
+        <title>Midnight City</title>
+        <artist>M83</artist>
+        <album>Hurry Up, We're Dreaming</album>
+        <genre>Synthpop</genre>
+        <bpm>105</bpm>
+        <length>252</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="11">
+        <title>Instant Crush</title>
+        <artist>Daft Punk</artist>
+        <album>Random Access Memories</album>
+        <genre>Synthpop</genre>
+        <bpm>84</bpm>
+        <length>337</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="12">
+        <title>Lose Yourself</title>
+        <artist>Eminem</artist>
+        <album>8 Mile</album>
+        <genre>Hip-Hop</genre>
+        <bpm>171</bpm>
+        <length>326</length>
+        <explicit>true</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="13">
+        <title>Numb</title>
+        <artist>Linkin Park</artist>
+        <album>Meteora</album>
+        <genre>Rock</genre>
+        <bpm>110</bpm>
+        <length>185</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="14">
+        <title>In The End</title>
+        <artist>Linkin Park</artist>
+        <album>Hybrid Theory</album>
+        <genre>Rock</genre>
+        <bpm>105</bpm>
+        <length>216</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="15">
+        <title>Smells Like Teen Spirit</title>
+        <artist>Nirvana</artist>
+        <album>Nevermind</album>
+        <genre>Rock</genre>
+        <bpm>117</bpm>
+        <length>301</length>
+        <explicit>true</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="16">
+        <title>Billie Jean</title>
+        <artist>Michael Jackson</artist>
+        <album>Thriller</album>
+        <genre>Pop</genre>
+        <bpm>117</bpm>
+        <length>294</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="17">
+        <title>Thriller</title>
+        <artist>Michael Jackson</artist>
+        <album>Thriller</album>
+        <genre>Pop</genre>
+        <bpm>118</bpm>
+        <length>358</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="18">
+        <title>Beat It</title>
+        <artist>Michael Jackson</artist>
+        <album>Thriller</album>
+        <genre>Rock</genre>
+        <bpm>139</bpm>
+        <length>258</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="19">
+        <title>Uptown Funk</title>
+        <artist>Mark Ronson ft. Bruno Mars</artist>
+        <album>Uptown Special</album>
+        <genre>Funk</genre>
+        <bpm>115</bpm>
+        <length>270</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="20">
+        <title>24K Magic</title>
+        <artist>Bruno Mars</artist>
+        <album>24K Magic</album>
+        <genre>Funk</genre>
+        <bpm>107</bpm>
+        <length>227</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="21">
+        <title>Treasure</title>
+        <artist>Bruno Mars</artist>
+        <album>Unorthodox Jukebox</album>
+        <genre>Funk</genre>
+        <bpm>116</bpm>
+        <length>178</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="22">
+        <title>Shape Of You</title>
+        <artist>Ed Sheeran</artist>
+        <album>Divide</album>
+        <genre>Pop</genre>
+        <bpm>96</bpm>
+        <length>233</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="23">
+        <title>Castle On The Hill</title>
+        <artist>Ed Sheeran</artist>
+        <album>Divide</album>
+        <genre>Pop</genre>
+        <bpm>135</bpm>
+        <length>261</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="24">
+        <title>Bad Guy</title>
+        <artist>Billie Eilish</artist>
+        <album>When We All Fall Asleep, Where Do We Go?</album>
+        <genre>Pop</genre>
+        <bpm>135</bpm>
+        <length>194</length>
+        <explicit>true</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="25">
+        <title>Happier Than Ever</title>
+        <artist>Billie Eilish</artist>
+        <album>Happier Than Ever</album>
+        <genre>Pop</genre>
+        <bpm>75</bpm>
+        <length>298</length>
+        <explicit>true</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="26">
+        <title>Stay</title>
+        <artist>The Kid LAROI and Justin Bieber</artist>
+        <album>Stay</album>
+        <genre>Pop</genre>
+        <bpm>170</bpm>
+        <length>141</length>
+        <explicit>true</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="27">
+        <title>Peaches</title>
+        <artist>Justin Bieber</artist>
+        <album>Justice</album>
+        <genre>Pop</genre>
+        <bpm>90</bpm>
+        <length>198</length>
+        <explicit>true</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="28">
+        <title>Circles</title>
+        <artist>Post Malone</artist>
+        <album>Hollywood's Bleeding</album>
+        <genre>Pop</genre>
+        <bpm>120</bpm>
+        <length>215</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="29">
+        <title>Sunflower</title>
+        <artist>Post Malone and Swae Lee</artist>
+        <album>Spider Man Into The Spider Verse</album>
+        <genre>Hip-Hop</genre>
+        <bpm>90</bpm>
+        <length>157</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="30">
+        <title>Rockstar</title>
+        <artist>Post Malone ft. 21 Savage</artist>
+        <album>Beerbongs and Bentleys</album>
+        <genre>Hip-Hop</genre>
+        <bpm>160</bpm>
+        <length>218</length>
+        <explicit>true</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="31">
+        <title>Industry Baby</title>
+        <artist>Lil Nas X and Jack Harlow</artist>
+        <album>Montero</album>
+        <genre>Hip-Hop</genre>
+        <bpm>150</bpm>
+        <length>212</length>
+        <explicit>true</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="32">
+        <title>Montero (Call Me By Your Name)</title>
+        <artist>Lil Nas X</artist>
+        <album>Montero</album>
+        <genre>Pop</genre>
+        <bpm>178</bpm>
+        <length>137</length>
+        <explicit>true</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="33">
+        <title>Old Town Road</title>
+        <artist>Lil Nas X</artist>
+        <album>7 EP</album>
+        <genre>Country</genre>
+        <bpm>136</bpm>
+        <length>157</length>
+        <explicit>true</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="34">
+        <title>Heat Waves</title>
+        <artist>Glass Animals</artist>
+        <album>Dreamland</album>
+        <genre>Indie</genre>
+        <bpm>80</bpm>
+        <length>238</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="35">
+        <title>Riptide</title>
+        <artist>Vance Joy</artist>
+        <album>Dream Your Life Away</album>
+        <genre>Indie</genre>
+        <bpm>100</bpm>
+        <length>203</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="36">
+        <title>Take On Me</title>
+        <artist>a ha</artist>
+        <album>Hunting High and Low</album>
+        <genre>Pop</genre>
+        <bpm>169</bpm>
+        <length>225</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="37">
+        <title>Africa</title>
+        <artist>Toto</artist>
+        <album>Toto IV</album>
+        <genre>Rock</genre>
+        <bpm>93</bpm>
+        <length>295</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="38">
+        <title>September</title>
+        <artist>Earth Wind and Fire</artist>
+        <album>The Best of Earth Wind and Fire Vol 1</album>
+        <genre>Funk</genre>
+        <bpm>126</bpm>
+        <length>215</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="39">
+        <title>Stayin Alive</title>
+        <artist>Bee Gees</artist>
+        <album>Saturday Night Fever</album>
+        <genre>Disco</genre>
+        <bpm>104</bpm>
+        <length>283</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="40">
+        <title>Dancing Queen</title>
+        <artist>ABBA</artist>
+        <album>Arrival</album>
+        <genre>Pop</genre>
+        <bpm>101</bpm>
+        <length>231</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="41">
+        <title>Gimme Gimme Gimme</title>
+        <artist>ABBA</artist>
+        <album>Voulez Vous</album>
+        <genre>Disco</genre>
+        <bpm>120</bpm>
+        <length>290</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="42">
+        <title>Mr Brightside</title>
+        <artist>The Killers</artist>
+        <album>Hot Fuss</album>
+        <genre>Rock</genre>
+        <bpm>148</bpm>
+        <length>222</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="43">
+        <title>Somebody Told Me</title>
+        <artist>The Killers</artist>
+        <album>Hot Fuss</album>
+        <genre>Rock</genre>
+        <bpm>138</bpm>
+        <length>197</length>
+        <explicit>true</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="44">
+        <title>Viva La Vida</title>
+        <artist>Coldplay</artist>
+        <album>Viva La Vida or Death and All His Friends</album>
+        <genre>Rock</genre>
+        <bpm>138</bpm>
+        <length>242</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="45">
+        <title>Yellow</title>
+        <artist>Coldplay</artist>
+        <album>Parachutes</album>
+        <genre>Rock</genre>
+        <bpm>86</bpm>
+        <length>269</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="46">
+        <title>Closer</title>
+        <artist>The Chainsmokers ft. Halsey</artist>
+        <album>Collage</album>
+        <genre>EDM</genre>
+        <bpm>95</bpm>
+        <length>244</length>
+        <explicit>true</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="47">
+        <title>Something Just Like This</title>
+        <artist>The Chainsmokers and Coldplay</artist>
+        <album>Memories Do Not Open</album>
+        <genre>EDM</genre>
+        <bpm>103</bpm>
+        <length>247</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="48">
+        <title>Wake Me Up</title>
+        <artist>Avicii</artist>
+        <album>True</album>
+        <genre>EDM</genre>
+        <bpm>124</bpm>
+        <length>247</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="49">
+        <title>Levels</title>
+        <artist>Avicii</artist>
+        <album>Levels</album>
+        <genre>EDM</genre>
+        <bpm>126</bpm>
+        <length>216</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="50">
+        <title>Hey Brother</title>
+        <artist>Avicii</artist>
+        <album>True</album>
+        <genre>EDM</genre>
+        <bpm>125</bpm>
+        <length>256</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="51">
+        <title>Animals</title>
+        <artist>Martin Garrix</artist>
+        <album>Gold Skies</album>
+        <genre>EDM</genre>
+        <bpm>128</bpm>
+        <length>285</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="52">
+        <title>Titanium</title>
+        <artist>David Guetta ft. Sia</artist>
+        <album>Nothing but the Beat</album>
+        <genre>EDM</genre>
+        <bpm>126</bpm>
+        <length>245</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="53">
+        <title>Don't You Worry Child</title>
+        <artist>Swedish House Mafia</artist>
+        <album>Until Now</album>
+        <genre>EDM</genre>
+        <bpm>129</bpm>
+        <length>211</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="54">
+        <title>Greyhound</title>
+        <artist>Swedish House Mafia</artist>
+        <album>Until Now</album>
+        <genre>EDM</genre>
+        <bpm>126</bpm>
+        <length>387</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="55">
+        <title>Strobe</title>
+        <artist>deadmau5</artist>
+        <album>For Lack of a Better Name</album>
+        <genre>EDM</genre>
+        <bpm>128</bpm>
+        <length>630</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="56">
+        <title>Ghosts N Stuff</title>
+        <artist>deadmau5</artist>
+        <album>For Lack of a Better Name</album>
+        <genre>EDM</genre>
+        <bpm>128</bpm>
+        <length>215</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="57">
+        <title>One Kiss</title>
+        <artist>Calvin Harris and Dua Lipa</artist>
+        <album>One Kiss</album>
+        <genre>House</genre>
+        <bpm>124</bpm>
+        <length>214</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="58">
+        <title>Summer</title>
+        <artist>Calvin Harris</artist>
+        <album>Motion</album>
+        <genre>EDM</genre>
+        <bpm>128</bpm>
+        <length>223</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="59">
+        <title>Feel So Close</title>
+        <artist>Calvin Harris</artist>
+        <album>18 Months</album>
+        <genre>EDM</genre>
+        <bpm>128</bpm>
+        <length>239</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="60">
+        <title>Bad Habits</title>
+        <artist>Ed Sheeran</artist>
+        <album>Equals</album>
+        <genre>Pop</genre>
+        <bpm>126</bpm>
+        <length>231</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="61">
+        <title>Shivers</title>
+        <artist>Ed Sheeran</artist>
+        <album>Equals</album>
+        <genre>Pop</genre>
+        <bpm>128</bpm>
+        <length>207</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="62">
+        <title>Poker Face</title>
+        <artist>Lady Gaga</artist>
+        <album>The Fame</album>
+        <genre>Pop</genre>
+        <bpm>120</bpm>
+        <length>238</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="63">
+        <title>Bad Romance</title>
+        <artist>Lady Gaga</artist>
+        <album>The Fame Monster</album>
+        <genre>Pop</genre>
+        <bpm>119</bpm>
+        <length>295</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="64">
+        <title>Uptown Girl</title>
+        <artist>Billy Joel</artist>
+        <album>An Innocent Man</album>
+        <genre>Pop</genre>
+        <bpm>128</bpm>
+        <length>212</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="65">
+        <title>Take Me Home Country Roads</title>
+        <artist>John Denver</artist>
+        <album>Poems Prayers and Promises</album>
+        <genre>Country</genre>
+        <bpm>82</bpm>
+        <length>191</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="66">
+        <title>Sweet Caroline</title>
+        <artist>Neil Diamond</artist>
+        <album>Sweet Caroline</album>
+        <genre>Pop</genre>
+        <bpm>123</bpm>
+        <length>201</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="67">
+        <title>Piano Man</title>
+        <artist>Billy Joel</artist>
+        <album>Piano Man</album>
+        <genre>Rock</genre>
+        <bpm>104</bpm>
+        <length>339</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="68">
+        <title>Bohemian Rhapsody</title>
+        <artist>Queen</artist>
+        <album>A Night at the Opera</album>
+        <genre>Rock</genre>
+        <bpm>144</bpm>
+        <length>354</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="69">
+        <title>Don't Stop Me Now</title>
+        <artist>Queen</artist>
+        <album>Jazz</album>
+        <genre>Rock</genre>
+        <bpm>156</bpm>
+        <length>210</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="70">
+        <title>Another One Bites the Dust</title>
+        <artist>Queen</artist>
+        <album>The Game</album>
+        <genre>Rock</genre>
+        <bpm>110</bpm>
+        <length>215</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="71">
+        <title>Thunderstruck</title>
+        <artist>AC/DC</artist>
+        <album>The Razors Edge</album>
+        <genre>Rock</genre>
+        <bpm>134</bpm>
+        <length>292</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="72">
+        <title>Highway To Hell</title>
+        <artist>AC/DC</artist>
+        <album>Highway To Hell</album>
+        <genre>Rock</genre>
+        <bpm>116</bpm>
+        <length>208</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="73">
+        <title>Enter Sandman</title>
+        <artist>Metallica</artist>
+        <album>Metallica</album>
+        <genre>Metal</genre>
+        <bpm>123</bpm>
+        <length>331</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="74">
+        <title>Sweet Child O Mine</title>
+        <artist>Guns N Roses</artist>
+        <album>Appetite for Destruction</album>
+        <genre>Rock</genre>
+        <bpm>125</bpm>
+        <length>356</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="75">
+        <title>Welcome To The Jungle</title>
+        <artist>Guns N Roses</artist>
+        <album>Appetite for Destruction</album>
+        <genre>Rock</genre>
+        <bpm>123</bpm>
+        <length>272</length>
+        <explicit>true</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="76">
+        <title>Crazy In Love</title>
+        <artist>Beyonce ft. Jay Z</artist>
+        <album>Dangerously In Love</album>
+        <genre>R&amp;B</genre>
+        <bpm>99</bpm>
+        <length>236</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="77">
+        <title>Single Ladies</title>
+        <artist>Beyonce</artist>
+        <album>I Am Sasha Fierce</album>
+        <genre>R&amp;B</genre>
+        <bpm>97</bpm>
+        <length>195</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="78">
+        <title>Rolling In The Deep</title>
+        <artist>Adele</artist>
+        <album>21</album>
+        <genre>Pop</genre>
+        <bpm>105</bpm>
+        <length>228</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="79">
+        <title>Someone Like You</title>
+        <artist>Adele</artist>
+        <album>21</album>
+        <genre>Pop</genre>
+        <bpm>136</bpm>
+        <length>285</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="80">
+        <title>Hello</title>
+        <artist>Adele</artist>
+        <album>25</album>
+        <genre>Pop</genre>
+        <bpm>79</bpm>
+        <length>295</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="81">
+        <title>Radioactive</title>
+        <artist>Imagine Dragons</artist>
+        <album>Night Visions</album>
+        <genre>Rock</genre>
+        <bpm>136</bpm>
+        <length>186</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="82">
+        <title>Demons</title>
+        <artist>Imagine Dragons</artist>
+        <album>Night Visions</album>
+        <genre>Rock</genre>
+        <bpm>90</bpm>
+        <length>177</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="83">
+        <title>Believer</title>
+        <artist>Imagine Dragons</artist>
+        <album>Evolve</album>
+        <genre>Rock</genre>
+        <bpm>125</bpm>
+        <length>204</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="84">
+        <title>Counting Stars</title>
+        <artist>OneRepublic</artist>
+        <album>Native</album>
+        <genre>Pop</genre>
+        <bpm>122</bpm>
+        <length>257</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="85">
+        <title>Apologize</title>
+        <artist>OneRepublic</artist>
+        <album>Dreaming Out Loud</album>
+        <genre>Pop</genre>
+        <bpm>122</bpm>
+        <length>188</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="86">
+        <title>Seven Nation Army</title>
+        <artist>The White Stripes</artist>
+        <album>Elephant</album>
+        <genre>Rock</genre>
+        <bpm>124</bpm>
+        <length>231</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="87">
+        <title>Take Me Out</title>
+        <artist>Franz Ferdinand</artist>
+        <album>Franz Ferdinand</album>
+        <genre>Rock</genre>
+        <bpm>104</bpm>
+        <length>238</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="88">
+        <title>Pumped Up Kicks</title>
+        <artist>Foster The People</artist>
+        <album>Torches</album>
+        <genre>Indie</genre>
+        <bpm>128</bpm>
+        <length>239</length>
+        <explicit>true</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="89">
+        <title>Feel Good Inc.</title>
+        <artist>Gorillaz</artist>
+        <album>Demon Days</album>
+        <genre>Alternative</genre>
+        <bpm>139</bpm>
+        <length>225</length>
+        <explicit>true</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="90">
+        <title>Clint Eastwood</title>
+        <artist>Gorillaz</artist>
+        <album>Gorillaz</album>
+        <genre>Alternative</genre>
+        <bpm>95</bpm>
+        <length>329</length>
+        <explicit>true</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="91">
+        <title>The Less I Know The Better</title>
+        <artist>Tame Impala</artist>
+        <album>Currents</album>
+        <genre>Indie</genre>
+        <bpm>118</bpm>
+        <length>216</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="92">
+        <title>Elephant</title>
+        <artist>Tame Impala</artist>
+        <album>Lonerism</album>
+        <genre>Indie</genre>
+        <bpm>126</bpm>
+        <length>231</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="93">
+        <title>Dreams</title>
+        <artist>Fleetwood Mac</artist>
+        <album>Rumours</album>
+        <genre>Rock</genre>
+        <bpm>120</bpm>
+        <length>255</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="94">
+        <title>Go Your Own Way</title>
+        <artist>Fleetwood Mac</artist>
+        <album>Rumours</album>
+        <genre>Rock</genre>
+        <bpm>138</bpm>
+        <length>220</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="95">
+        <title>Hotel California</title>
+        <artist>Eagles</artist>
+        <album>Hotel California</album>
+        <genre>Rock</genre>
+        <bpm>75</bpm>
+        <length>390</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="96">
+        <title>Wonderwall</title>
+        <artist>Oasis</artist>
+        <album>(What's The Story) Morning Glory?</album>
+        <genre>Rock</genre>
+        <bpm>87</bpm>
+        <length>259</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="97">
+        <title>Mr Blue Sky</title>
+        <artist>Electric Light Orchestra</artist>
+        <album>Out of the Blue</album>
+        <genre>Rock</genre>
+        <bpm>178</bpm>
+        <length>305</length>
+        <explicit>false</explicit>
+        <rating>5</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="98">
+        <title>Take My Breath</title>
+        <artist>The Weeknd</artist>
+        <album>Dawn FM</album>
+        <genre>Pop</genre>
+        <bpm>121</bpm>
+        <length>220</length>
+        <explicit>false</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="99">
+        <title>Starboy</title>
+        <artist>The Weeknd</artist>
+        <album>Starboy</album>
+        <genre>Pop</genre>
+        <bpm>186</bpm>
+        <length>230</length>
+        <explicit>true</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>0.0</price>
+        <count>0</count>
+    </song>
+    <song id="100">
+        <title>The Hills</title>
+        <artist>The Weeknd</artist>
+        <album>Beauty Behind The Madness</album>
+        <genre>Pop</genre>
+        <bpm>113</bpm>
+        <length>242</length>
+        <explicit>true</explicit>
+        <rating>4</rating>
+        <cover/>
+        <price>5.99</price>
+        <count>10</count>
+    </song>
+</songs>

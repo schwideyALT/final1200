@@ -1,27 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <songs>
-  <song id="1">
-    <title>Lost In Tokyo</title>
-    <artist>Kavinsky</artist>
-    <album>Nightcall</album>
-    <genre>Synthwave</genre>
-    <bpm>92</bpm>
-    <length>242</length>
-    <explicit>true</explicit>
-    <rating>4</rating>
-    <cover/>
-  </song>
-  <song id="2">
-    <title>Rose Rouge</title>
-    <artist>St Germain</artist>
-    <album>Tourist</album>
-    <genre>House</genre>
-    <bpm>124</bpm>
-    <length>446</length>
-    <explicit>false</explicit>
-    <rating>5</rating>
-    <cover/>
-  </song>
   <song id="3">
     <title>Brazil</title>
     <artist>Declan McKenna</artist>
@@ -31,7 +9,9 @@
     <length>250</length>
     <explicit>false</explicit>
     <rating>3</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e5/b9/bb/e5b9bb22-c765-a21e-15f0-c116cb974c7b/886446197173.jpg/100x100bb.jpg</cover>
+    <price>0.93</price>
+    <count>0</count>
   </song>
   <song id="4">
     <title>Blinding Lights</title>
@@ -42,7 +22,9 @@
     <length>200</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/a6/6e/bf/a66ebf79-5008-8948-b352-a790fc87446b/19UM1IM04638.rgb.jpg/100x100bb.jpg</cover>
+    <price>2.35</price>
+    <count>0</count>
   </song>
   <song id="5">
     <title>Save Your Tears</title>
@@ -53,18 +35,9 @@
     <length>215</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
-  </song>
-  <song id="6">
-    <title>Levitating</title>
-    <artist>Dua Lipa</artist>
-    <album>Future Nostalgia</album>
-    <genre>Pop</genre>
-    <bpm>103</bpm>
-    <length>203</length>
-    <explicit>false</explicit>
-    <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/83/3a/f7/833af71b-2e0c-3303-24f5-8f5c546c073b/20UMGIM21167.rgb.jpg/100x100bb.jpg</cover>
+    <price>1.92</price>
+    <count>0</count>
   </song>
   <song id="7">
     <title>Don't Start Now</title>
@@ -75,7 +48,9 @@
     <length>183</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/41/ee/66/41ee66fa-f8dd-7e82-155a-3a1b360dc562/190295322175.jpg/100x100bb.jpg</cover>
+    <price>2.27</price>
+    <count>6</count>
   </song>
   <song id="8">
     <title>Get Lucky</title>
@@ -86,7 +61,9 @@
     <length>248</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/e8/43/5f/e8435ffa-b6b9-b171-40ab-4ff3959ab661/886443919266.jpg/100x100bb.jpg</cover>
+    <price>1.06</price>
+    <count>31</count>
   </song>
   <song id="9">
     <title>One More Time</title>
@@ -97,7 +74,9 @@
     <length>320</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/fd/4a/77/fd4a77db-0ebc-d043-41a2-f32fa1bb0fb4/dj.qrikkdwj.jpg/100x100bb.jpg</cover>
+    <price>1.03</price>
+    <count>10</count>
   </song>
   <song id="10">
     <title>Midnight City</title>
@@ -108,7 +87,9 @@
     <length>252</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/cb/7b/a9/cb7ba903-b5f1-cc21-90db-7a81b7aa0997/724596951057.jpg/100x100bb.jpg</cover>
+    <price>1.0</price>
+    <count>2</count>
   </song>
   <song id="11">
     <title>Instant Crush</title>
@@ -119,7 +100,9 @@
     <length>337</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/e8/43/5f/e8435ffa-b6b9-b171-40ab-4ff3959ab661/886443919266.jpg/100x100bb.jpg</cover>
+    <price>2.45</price>
+    <count>22</count>
   </song>
   <song id="12">
     <title>Lose Yourself</title>
@@ -130,7 +113,9 @@
     <length>326</length>
     <explicit>true</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/08/23/fc/0823fcd9-cb44-695b-32bf-b3bf51d9f800/00606949351229.rgb.jpg/100x100bb.jpg</cover>
+    <price>2.23</price>
+    <count>4</count>
   </song>
   <song id="13">
     <title>Numb</title>
@@ -141,7 +126,9 @@
     <length>185</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/13/44/05/134405bd-9e27-a678-8953-b5f724201f95/093624948988.jpg/100x100bb.jpg</cover>
+    <price>0.88</price>
+    <count>29</count>
   </song>
   <song id="14">
     <title>In The End</title>
@@ -152,7 +139,9 @@
     <length>216</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/53/a7/7f/53a77fab-c54c-a57b-8130-248fc12d0c80/093624948995.jpg/100x100bb.jpg</cover>
+    <price>1.58</price>
+    <count>0</count>
   </song>
   <song id="15">
     <title>Smells Like Teen Spirit</title>
@@ -163,7 +152,9 @@
     <length>301</length>
     <explicit>true</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/95/fd/b9/95fdb9b2-6d2b-92a6-97f2-51c1a6d77f1a/00602527874609.rgb.jpg/100x100bb.jpg</cover>
+    <price>0.91</price>
+    <count>0</count>
   </song>
   <song id="16">
     <title>Billie Jean</title>
@@ -174,7 +165,9 @@
     <length>294</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/32/4f/fd/324ffda2-9e51-8f6a-0c2d-c6fd2b41ac55/074643811224.jpg/100x100bb.jpg</cover>
+    <price>1.87</price>
+    <count>40</count>
   </song>
   <song id="17">
     <title>Thriller</title>
@@ -185,7 +178,9 @@
     <length>358</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/32/4f/fd/324ffda2-9e51-8f6a-0c2d-c6fd2b41ac55/074643811224.jpg/100x100bb.jpg</cover>
+    <price>2.48</price>
+    <count>18</count>
   </song>
   <song id="18">
     <title>Beat It</title>
@@ -196,7 +191,9 @@
     <length>258</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/32/4f/fd/324ffda2-9e51-8f6a-0c2d-c6fd2b41ac55/074643811224.jpg/100x100bb.jpg</cover>
+    <price>0.9</price>
+    <count>38</count>
   </song>
   <song id="19">
     <title>Uptown Funk</title>
@@ -207,7 +204,9 @@
     <length>270</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/7e/30/c5/7e30c572-aa47-5f7b-c6fd-42d50cd2c56d/886444959797.jpg/100x100bb.jpg</cover>
+    <price>1.74</price>
+    <count>28</count>
   </song>
   <song id="20">
     <title>24K Magic</title>
@@ -218,7 +217,9 @@
     <length>227</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/e3/47/a0/e347a0cc-87ce-5d05-d560-176c7d48f66e/075679904119.jpg/100x100bb.jpg</cover>
+    <price>2.26</price>
+    <count>12</count>
   </song>
   <song id="21">
     <title>Treasure</title>
@@ -229,7 +230,9 @@
     <length>178</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/15/63/53/156353b8-d45b-a17d-f553-2d125aeb3cb3/075679957474.jpg/100x100bb.jpg</cover>
+    <price>0.92</price>
+    <count>33</count>
   </song>
   <song id="22">
     <title>Shape Of You</title>
@@ -240,7 +243,9 @@
     <length>233</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/15/e6/e8/15e6e8a4-4190-6a8b-86c3-ab4a51b88288/190295851286.jpg/100x100bb.jpg</cover>
+    <price>1.51</price>
+    <count>8</count>
   </song>
   <song id="23">
     <title>Castle On The Hill</title>
@@ -251,7 +256,9 @@
     <length>261</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/15/e6/e8/15e6e8a4-4190-6a8b-86c3-ab4a51b88288/190295851286.jpg/100x100bb.jpg</cover>
+    <price>2.4</price>
+    <count>34</count>
   </song>
   <song id="24">
     <title>Bad Guy</title>
@@ -262,7 +269,9 @@
     <length>194</length>
     <explicit>true</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/1a/37/d1/1a37d1b1-8508-54f2-f541-bf4e437dda76/19UMGIM05028.rgb.jpg/100x100bb.jpg</cover>
+    <price>0.99</price>
+    <count>18</count>
   </song>
   <song id="25">
     <title>Happier Than Ever</title>
@@ -273,7 +282,9 @@
     <length>298</length>
     <explicit>true</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/02/b7/6d/02b76dd3-4006-bc65-9f33-33b70a95222a/21UMGIM36684.rgb.jpg/100x100bb.jpg</cover>
+    <price>1.75</price>
+    <count>21</count>
   </song>
   <song id="26">
     <title>Stay</title>
@@ -284,7 +295,9 @@
     <length>141</length>
     <explicit>true</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/89/59/6a/89596ab9-fa3c-8d08-4d95-a6450fa2013c/886449400515.jpg/100x100bb.jpg</cover>
+    <price>2.01</price>
+    <count>37</count>
   </song>
   <song id="27">
     <title>Peaches</title>
@@ -295,7 +308,9 @@
     <length>198</length>
     <explicit>true</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/e0/92/da/e092da2d-9f6d-11dc-7843-2021e95a2b61/21UMGIM17518.rgb.jpg/100x100bb.jpg</cover>
+    <price>1.54</price>
+    <count>2</count>
   </song>
   <song id="28">
     <title>Circles</title>
@@ -306,7 +321,9 @@
     <length>215</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/7b/1b/1b/7b1b1b0b-7ce2-b223-f9e0-8e36abe51877/19UMGIM78325.rgb.jpg/100x100bb.jpg</cover>
+    <price>1.66</price>
+    <count>13</count>
   </song>
   <song id="29">
     <title>Sunflower</title>
@@ -317,7 +334,9 @@
     <length>157</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/4b/30/2c/4b302cb6-7a14-5464-4e97-0577e9d0be49/18UMGIM82277.rgb.jpg/100x100bb.jpg</cover>
+    <price>1.69</price>
+    <count>21</count>
   </song>
   <song id="30">
     <title>Rockstar</title>
@@ -328,7 +347,9 @@
     <length>218</length>
     <explicit>true</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/55/9f/fb/559ffb75-3c00-abd6-7b1f-8b6b1518b173/18UMGIM22101.rgb.jpg/100x100bb.jpg</cover>
+    <price>2.16</price>
+    <count>31</count>
   </song>
   <song id="31">
     <title>Industry Baby</title>
@@ -339,7 +360,9 @@
     <length>212</length>
     <explicit>true</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/f7/16/67/f7166746-6299-5e54-8c7c-9535e941a53e/886449403929.jpg/100x100bb.jpg</cover>
+    <price>1.2</price>
+    <count>27</count>
   </song>
   <song id="32">
     <title>Montero (Call Me By Your Name)</title>
@@ -350,7 +373,9 @@
     <length>137</length>
     <explicit>true</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/8d/ef/37/8def37cf-f641-1bba-f312-61a9b8d19fbf/886449068029.jpg/100x100bb.jpg</cover>
+    <price>1.53</price>
+    <count>38</count>
   </song>
   <song id="33">
     <title>Old Town Road</title>
@@ -361,7 +386,9 @@
     <length>157</length>
     <explicit>true</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/07/d4/c3/07d4c33e-b793-d78f-bb1b-52f1e224da88/886447788264.jpg/100x100bb.jpg</cover>
+    <price>2.08</price>
+    <count>4</count>
   </song>
   <song id="34">
     <title>Heat Waves</title>
@@ -372,7 +399,9 @@
     <length>238</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/da/8b/77/da8b7731-6f4f-eacf-5e74-8b23389eefa1/20UMGIM03371.rgb.jpg/100x100bb.jpg</cover>
+    <price>1.46</price>
+    <count>20</count>
   </song>
   <song id="35">
     <title>Riptide</title>
@@ -383,7 +412,9 @@
     <length>203</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/7a/1c/65/7a1c6571-34e9-bb77-32be-90c72ba003c0/075679920355.jpg/100x100bb.jpg</cover>
+    <price>1.94</price>
+    <count>23</count>
   </song>
   <song id="36">
     <title>Take On Me</title>
@@ -394,7 +425,9 @@
     <length>225</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music/c6/e1/c8/mzi.ixgzfcmc.jpg/100x100bb.jpg</cover>
+    <price>0.8</price>
+    <count>24</count>
   </song>
   <song id="37">
     <title>Africa</title>
@@ -405,7 +438,9 @@
     <length>295</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/69/ce/d2/69ced240-07a7-2a04-bbab-2afbacf30809/074643772822.jpg/100x100bb.jpg</cover>
+    <price>1.72</price>
+    <count>27</count>
   </song>
   <song id="38">
     <title>September</title>
@@ -416,7 +451,9 @@
     <length>215</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/5c/8e/19/5c8e191d-b458-fc29-54ef-bd9367835044/886447618547.jpg/100x100bb.jpg</cover>
+    <price>2.38</price>
+    <count>23</count>
   </song>
   <song id="39">
     <title>Stayin Alive</title>
@@ -427,7 +464,9 @@
     <length>283</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music128/v4/6d/ed/e9/6dede96a-6c1b-c5bb-001b-e3039195bdbb/00602567067177.rgb.jpg/100x100bb.jpg</cover>
+    <price>1.11</price>
+    <count>3</count>
   </song>
   <song id="40">
     <title>Dancing Queen</title>
@@ -438,7 +477,9 @@
     <length>231</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/60/f8/a6/60f8a6bc-e875-238d-f2f8-f34a6034e6d2/14UMGIM07615.rgb.jpg/100x100bb.jpg</cover>
+    <price>2.19</price>
+    <count>6</count>
   </song>
   <song id="41">
     <title>Gimme Gimme Gimme</title>
@@ -449,7 +490,9 @@
     <length>290</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/60/f8/a6/60f8a6bc-e875-238d-f2f8-f34a6034e6d2/14UMGIM07615.rgb.jpg/100x100bb.jpg</cover>
+    <price>1.59</price>
+    <count>21</count>
   </song>
   <song id="42">
     <title>Mr Brightside</title>
@@ -460,7 +503,9 @@
     <length>222</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/11/64/9c/11649c80-2066-dba8-77a9-df7eecae26c1/17UM1IM06937.rgb.jpg/100x100bb.jpg</cover>
+    <price>2.39</price>
+    <count>39</count>
   </song>
   <song id="43">
     <title>Somebody Told Me</title>
@@ -471,7 +516,9 @@
     <length>197</length>
     <explicit>true</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/07/1a/5a/071a5aee-6e42-060c-35b9-6a6e45b9ea59/06UMGIM10441.rgb.jpg/100x100bb.jpg</cover>
+    <price>1.38</price>
+    <count>9</count>
   </song>
   <song id="44">
     <title>Viva La Vida</title>
@@ -482,7 +529,9 @@
     <length>242</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/52/aa/85/52aa851f-15b7-6322-f91f-df84b15b7b19/190295978044.jpg/100x100bb.jpg</cover>
+    <price>2.18</price>
+    <count>16</count>
   </song>
   <song id="45">
     <title>Yellow</title>
@@ -493,7 +542,9 @@
     <length>269</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/f5/93/8c/f5938c49-964c-31d1-4b33-78b634f71fb7/190295978075.jpg/100x100bb.jpg</cover>
+    <price>0.97</price>
+    <count>26</count>
   </song>
   <song id="46">
     <title>Closer</title>
@@ -504,7 +555,9 @@
     <length>244</length>
     <explicit>true</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/41/f8/38/41f8380b-9b56-d5d4-31f7-a6411c0c9aaa/886446102054.jpg/100x100bb.jpg</cover>
+    <price>2.47</price>
+    <count>30</count>
   </song>
   <song id="47">
     <title>Something Just Like This</title>
@@ -515,7 +568,9 @@
     <length>247</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/9d/56/6f/9d566f55-5253-bed6-5c31-df952dae649d/886446379289.jpg/100x100bb.jpg</cover>
+    <price>2.1</price>
+    <count>0</count>
   </song>
   <song id="48">
     <title>Wake Me Up</title>
@@ -526,7 +581,9 @@
     <length>247</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/18/5b/1e/185b1ef5-5d97-19d8-aebf-8e29e41874ef/13UAAIM59255.rgb.jpg/100x100bb.jpg</cover>
+    <price>1.43</price>
+    <count>23</count>
   </song>
   <song id="49">
     <title>Levels</title>
@@ -537,7 +594,9 @@
     <length>216</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/67/38/43/67384338-9ed7-fc68-5927-93f1fcf4705d/11UMGIM36900.rgb.jpg/100x100bb.jpg</cover>
+    <price>0.86</price>
+    <count>16</count>
   </song>
   <song id="50">
     <title>Hey Brother</title>
@@ -548,7 +607,9 @@
     <length>256</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/18/5b/1e/185b1ef5-5d97-19d8-aebf-8e29e41874ef/13UAAIM59255.rgb.jpg/100x100bb.jpg</cover>
+    <price>1.64</price>
+    <count>18</count>
   </song>
   <song id="51">
     <title>Animals</title>
@@ -559,7 +620,9 @@
     <length>285</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/6e/1e/f0/6e1ef055-195a-bb73-d5a8-5926058366a5/8712944577525.png/100x100bb.jpg</cover>
+    <price>1.74</price>
+    <count>8</count>
   </song>
   <song id="52">
     <title>Titanium</title>
@@ -570,7 +633,9 @@
     <length>245</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/99/b4/7b/99b47bd8-2b22-e1ef-2e60-c5147f27a861/dj.thrvmjqj.jpg/100x100bb.jpg</cover>
+    <price>1.01</price>
+    <count>0</count>
   </song>
   <song id="53">
     <title>Don't You Worry Child</title>
@@ -581,7 +646,9 @@
     <length>211</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/6a/30/7d/6a307d9d-2d13-999a-3b9c-03221087f845/15UMGIM27846.rgb.jpg/100x100bb.jpg</cover>
+    <price>0.92</price>
+    <count>22</count>
   </song>
   <song id="54">
     <title>Greyhound</title>
@@ -592,7 +659,9 @@
     <length>387</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/83/56/36/8356367b-5938-5ce6-b13b-ee05a60a530c/05099972323359.jpg/100x100bb.jpg</cover>
+    <price>1.21</price>
+    <count>28</count>
   </song>
   <song id="55">
     <title>Strobe</title>
@@ -603,7 +672,9 @@
     <length>630</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/4a/53/5d/4a535d3e-4d70-9bd9-4ef5-40016b6661ef/617465240959.jpg/100x100bb.jpg</cover>
+    <price>1.57</price>
+    <count>40</count>
   </song>
   <song id="56">
     <title>Ghosts N Stuff</title>
@@ -614,7 +685,9 @@
     <length>215</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/60/9d/93/609d93fa-2131-ae4a-f52e-dbb89b5b75f4/617465217456.jpg/100x100bb.jpg</cover>
+    <price>1.41</price>
+    <count>23</count>
   </song>
   <song id="57">
     <title>One Kiss</title>
@@ -625,7 +698,9 @@
     <length>214</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/91/2a/7b/912a7bdb-c2f6-b887-9392-49728fece0df/886447044360.jpg/100x100bb.jpg</cover>
+    <price>1.23</price>
+    <count>16</count>
   </song>
   <song id="58">
     <title>Summer</title>
@@ -636,7 +711,9 @@
     <length>223</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/da/50/cc/da50cc80-3515-a38d-369b-0d700ffd249d/886444820448.jpg/100x100bb.jpg</cover>
+    <price>1.14</price>
+    <count>6</count>
   </song>
   <song id="59">
     <title>Feel So Close</title>
@@ -647,7 +724,9 @@
     <length>239</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/15/ba/ec/15baec26-2db7-0abd-4197-76372183a628/mzi.xbpaeiac.jpg/100x100bb.jpg</cover>
+    <price>0.99</price>
+    <count>0</count>
   </song>
   <song id="60">
     <title>Bad Habits</title>
@@ -658,7 +737,9 @@
     <length>231</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/63/45/cc/6345cc98-aa83-ad6e-e3c9-1a36ff9838a4/190296614316.jpg/100x100bb.jpg</cover>
+    <price>2.05</price>
+    <count>25</count>
   </song>
   <song id="61">
     <title>Shivers</title>
@@ -669,7 +750,9 @@
     <length>207</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/c5/d8/c6/c5d8c675-63e3-6632-33db-2401eabe574d/190296491412.jpg/100x100bb.jpg</cover>
+    <price>0.98</price>
+    <count>9</count>
   </song>
   <song id="62">
     <title>Poker Face</title>
@@ -680,7 +763,9 @@
     <length>238</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/35/0d/d6/350dd697-4b78-8aaf-cf65-74b96c1adab8/21UMGIM68808.rgb.jpg/100x100bb.jpg</cover>
+    <price>2.05</price>
+    <count>7</count>
   </song>
   <song id="63">
     <title>Bad Romance</title>
@@ -691,7 +776,9 @@
     <length>295</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/f2/c3/95/f2c39563-221c-6029-3dc9-43ee7978661f/23UM1IM02693.rgb.jpg/100x100bb.jpg</cover>
+    <price>0.81</price>
+    <count>2</count>
   </song>
   <song id="64">
     <title>Uptown Girl</title>
@@ -702,7 +789,9 @@
     <length>212</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/f0/7a/54/f07a54ab-3ebc-6813-e515-86200b8138fc/dj.uthntyfe.jpg/100x100bb.jpg</cover>
+    <price>2.35</price>
+    <count>22</count>
   </song>
   <song id="65">
     <title>Take Me Home Country Roads</title>
@@ -712,8 +801,10 @@
     <bpm>82</bpm>
     <length>191</length>
     <explicit>false</explicit>
-    <rating>5</rating>
-    <cover/>
+    <rating>2</rating>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/52/ed/f3/52edf3b6-5b73-c52d-e3f6-4473412eec7c/886443406193.jpg/100x100bb.jpg</cover>
+    <price>1.21</price>
+    <count>14</count>
   </song>
   <song id="66">
     <title>Sweet Caroline</title>
@@ -724,7 +815,9 @@
     <length>201</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/05/75/59/05755990-5874-04ab-4ab5-8f4fd90ac851/06UMGIM01101.rgb.jpg/100x100bb.jpg</cover>
+    <price>1.77</price>
+    <count>39</count>
   </song>
   <song id="67">
     <title>Piano Man</title>
@@ -735,7 +828,9 @@
     <length>339</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/67/f9/8d/67f98d03-7896-153f-4965-a92458c06965/dj.aiuntmgo.jpg/100x100bb.jpg</cover>
+    <price>1.35</price>
+    <count>1</count>
   </song>
   <song id="68">
     <title>Bohemian Rhapsody</title>
@@ -746,7 +841,9 @@
     <length>354</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/4d/08/2a/4d082a9e-7898-1aa1-a02f-339810058d9e/14DMGIM05632.rgb.jpg/100x100bb.jpg</cover>
+    <price>1.49</price>
+    <count>11</count>
   </song>
   <song id="69">
     <title>Don't Stop Me Now</title>
@@ -757,7 +854,9 @@
     <length>210</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/4d/08/2a/4d082a9e-7898-1aa1-a02f-339810058d9e/14DMGIM05632.rgb.jpg/100x100bb.jpg</cover>
+    <price>2.1</price>
+    <count>37</count>
   </song>
   <song id="70">
     <title>Another One Bites the Dust</title>
@@ -768,7 +867,9 @@
     <length>215</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/4d/08/2a/4d082a9e-7898-1aa1-a02f-339810058d9e/14DMGIM05632.rgb.jpg/100x100bb.jpg</cover>
+    <price>1.82</price>
+    <count>27</count>
   </song>
   <song id="71">
     <title>Thunderstruck</title>
@@ -779,7 +880,9 @@
     <length>292</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Features125/v4/bb/a2/f0/bba2f0d7-4d9e-c617-d49e-3ae02fd5d440/dj.xbkfgllk.jpg/100x100bb.jpg</cover>
+    <price>1.39</price>
+    <count>10</count>
   </song>
   <song id="72">
     <title>Highway To Hell</title>
@@ -790,7 +893,9 @@
     <length>208</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/b9/c8/ef/b9c8ef42-bbc9-64df-11f8-717571f6730f/886443673458.jpg/100x100bb.jpg</cover>
+    <price>1.93</price>
+    <count>31</count>
   </song>
   <song id="73">
     <title>Enter Sandman</title>
@@ -801,7 +906,9 @@
     <length>331</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/2e/94/95/2e9495d7-dfe3-ddc8-87ef-6ef797a60218/850007452056.png/100x100bb.jpg</cover>
+    <price>2.16</price>
+    <count>10</count>
   </song>
   <song id="74">
     <title>Sweet Child O Mine</title>
@@ -812,7 +919,9 @@
     <length>356</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg</cover>
+    <price>2.18</price>
+    <count>33</count>
   </song>
   <song id="75">
     <title>Welcome To The Jungle</title>
@@ -823,29 +932,35 @@
     <length>272</length>
     <explicit>true</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/a0/4d/c4/a04dc484-03cc-02aa-fa82-5334fcb4bc16/18UMGIM24878.rgb.jpg/100x100bb.jpg</cover>
+    <price>2.35</price>
+    <count>6</count>
   </song>
   <song id="76">
     <title>Crazy In Love</title>
     <artist>Beyonce ft. Jay Z</artist>
     <album>Dangerously In Love</album>
-    <genre>R&amp;B</genre>
+    <genre>RnB</genre>
     <bpm>99</bpm>
     <length>236</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music/03/c5/d4/mzi.ldvrmhxt.jpg/100x100bb.jpg</cover>
+    <price>2.3</price>
+    <count>39</count>
   </song>
   <song id="77">
     <title>Single Ladies</title>
     <artist>Beyonce</artist>
     <album>I Am Sasha Fierce</album>
-    <genre>R&amp;B</genre>
+    <genre>RnB</genre>
     <bpm>97</bpm>
     <length>195</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/35/0f/55/350f55da-2104-162a-5872-cb35fef30410/mzi.morbeoaw.jpg/100x100bb.jpg</cover>
+    <price>1.11</price>
+    <count>25</count>
   </song>
   <song id="78">
     <title>Rolling In The Deep</title>
@@ -856,7 +971,9 @@
     <length>228</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/d8/e3/f9/d8e3f9ea-d6fe-9a1b-9f13-109983d3062e/191404113868.png/100x100bb.jpg</cover>
+    <price>1.35</price>
+    <count>31</count>
   </song>
   <song id="79">
     <title>Someone Like You</title>
@@ -867,7 +984,9 @@
     <length>285</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/d8/e3/f9/d8e3f9ea-d6fe-9a1b-9f13-109983d3062e/191404113868.png/100x100bb.jpg</cover>
+    <price>1.39</price>
+    <count>19</count>
   </song>
   <song id="80">
     <title>Hello</title>
@@ -878,7 +997,9 @@
     <length>295</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/08/8c/24/088c2405-2e33-801b-5c38-e967f2c01e69/191404113974.png/100x100bb.jpg</cover>
+    <price>1.43</price>
+    <count>0</count>
   </song>
   <song id="81">
     <title>Radioactive</title>
@@ -889,7 +1010,9 @@
     <length>186</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/1f/fa/09/1ffa092f-f52f-4a66-7d10-4cc5982dc747/12UMGIM46901.rgb.jpg/100x100bb.jpg</cover>
+    <price>1.38</price>
+    <count>39</count>
   </song>
   <song id="82">
     <title>Demons</title>
@@ -900,7 +1023,9 @@
     <length>177</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/1f/fa/09/1ffa092f-f52f-4a66-7d10-4cc5982dc747/12UMGIM46901.rgb.jpg/100x100bb.jpg</cover>
+    <price>2.13</price>
+    <count>13</count>
   </song>
   <song id="83">
     <title>Believer</title>
@@ -911,7 +1036,9 @@
     <length>204</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/11/7a/b8/117ab805-6811-8929-18b9-0fad7baf0c25/17UMGIM98210.rgb.jpg/100x100bb.jpg</cover>
+    <price>2.22</price>
+    <count>21</count>
   </song>
   <song id="84">
     <title>Counting Stars</title>
@@ -922,7 +1049,9 @@
     <length>257</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/25/46/a7/2546a71a-b2bb-b4c9-4c52-a4daa3ae23ca/13UMGIM15076.rgb.jpg/100x100bb.jpg</cover>
+    <price>1.02</price>
+    <count>19</count>
   </song>
   <song id="85">
     <title>Apologize</title>
@@ -933,7 +1062,9 @@
     <length>188</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/68/d6/f0/68d6f04e-f95e-d27c-c099-315eca5257bb/07UMGIM16721.rgb.jpg/100x100bb.jpg</cover>
+    <price>1.57</price>
+    <count>25</count>
   </song>
   <song id="86">
     <title>Seven Nation Army</title>
@@ -944,7 +1075,9 @@
     <length>231</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music114/v4/07/25/09/0725098a-09f4-f240-e551-94384a590371/886448799009.jpg/100x100bb.jpg</cover>
+    <price>2.05</price>
+    <count>14</count>
   </song>
   <song id="87">
     <title>Take Me Out</title>
@@ -955,7 +1088,9 @@
     <length>238</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/83/c6/54/83c6541f-3b90-b46a-b46a-17bf8fd9af16/5034202113645.png/100x100bb.jpg</cover>
+    <price>2.17</price>
+    <count>35</count>
   </song>
   <song id="88">
     <title>Pumped Up Kicks</title>
@@ -966,7 +1101,9 @@
     <length>239</length>
     <explicit>true</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/ba/07/5b/ba075b3c-f0c4-b519-59f3-7ae74d43246b/dj.lajxsvkg.jpg/100x100bb.jpg</cover>
+    <price>0.87</price>
+    <count>10</count>
   </song>
   <song id="89">
     <title>Feel Good Inc.</title>
@@ -977,7 +1114,9 @@
     <length>225</length>
     <explicit>true</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/1c/0f/81/1c0f818a-e458-dd84-6f1b-ccbdf5fe14d6/825646291045.jpg/100x100bb.jpg</cover>
+    <price>2.01</price>
+    <count>26</count>
   </song>
   <song id="90">
     <title>Clint Eastwood</title>
@@ -989,6 +1128,8 @@
     <explicit>true</explicit>
     <rating>4</rating>
     <cover/>
+    <price>2.29</price>
+    <count>13</count>
   </song>
   <song id="91">
     <title>The Less I Know The Better</title>
@@ -1000,6 +1141,8 @@
     <explicit>false</explicit>
     <rating>4</rating>
     <cover/>
+    <price>2.42</price>
+    <count>5</count>
   </song>
   <song id="92">
     <title>Elephant</title>
@@ -1011,6 +1154,8 @@
     <explicit>false</explicit>
     <rating>4</rating>
     <cover/>
+    <price>1.99</price>
+    <count>22</count>
   </song>
   <song id="93">
     <title>Dreams</title>
@@ -1021,7 +1166,9 @@
     <length>255</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/d2/48/f4/d248f4ae-a7e4-a48e-1588-6617de3e8d76/mzi.izeorbmm.jpg/100x100bb.jpg</cover>
+    <price>2.02</price>
+    <count>4</count>
   </song>
   <song id="94">
     <title>Go Your Own Way</title>
@@ -1033,6 +1180,8 @@
     <explicit>false</explicit>
     <rating>5</rating>
     <cover/>
+    <price>1.58</price>
+    <count>30</count>
   </song>
   <song id="95">
     <title>Hotel California</title>
@@ -1043,7 +1192,9 @@
     <length>390</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/88/16/2c/88162c3d-46db-8321-61f3-3a47404cfe76/075596050920.jpg/100x100bb.jpg</cover>
+    <price>1.838</price>
+    <count>27</count>
   </song>
   <song id="96">
     <title>Wonderwall</title>
@@ -1055,6 +1206,8 @@
     <explicit>false</explicit>
     <rating>5</rating>
     <cover/>
+    <price>2.33</price>
+    <count>6</count>
   </song>
   <song id="97">
     <title>Mr Blue Sky</title>
@@ -1065,7 +1218,9 @@
     <length>305</length>
     <explicit>false</explicit>
     <rating>5</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/a3/6e/74/a36e7450-3818-f2c1-a137-d4ef5934c119/827969448922.jpg/100x100bb.jpg</cover>
+    <price>0.94</price>
+    <count>5</count>
   </song>
   <song id="98">
     <title>Take My Breath</title>
@@ -1076,7 +1231,9 @@
     <length>220</length>
     <explicit>false</explicit>
     <rating>4</rating>
-    <cover/>
+    <cover>https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/92/14/e3/9214e352-3322-3708-4903-cf5059c4985f/21UM1IM58861.rgb.jpg/100x100bb.jpg</cover>
+    <price>1.05</price>
+    <count>18</count>
   </song>
   <song id="99">
     <title>Starboy</title>
@@ -1088,6 +1245,8 @@
     <explicit>true</explicit>
     <rating>4</rating>
     <cover/>
+    <price>1.84</price>
+    <count>28</count>
   </song>
   <song id="100">
     <title>The Hills</title>
@@ -1099,5 +1258,33 @@
     <explicit>true</explicit>
     <rating>4</rating>
     <cover/>
+    <price>1.33</price>
+    <count>1</count>
+  </song>
+  <song id="101">
+    <title>4545</title>
+    <artist>1234567890-</artist>
+    <album>56789</album>
+    <genre>67</genre>
+    <bpm>744</bpm>
+    <length>0</length>
+    <explicit>false</explicit>
+    <rating>5</rating>
+    <cover>C:\Users\matts\OneDrive - University of Toledo\Documents\python\abs(x).jpg</cover>
+    <price>0.0</price>
+    <count>100</count>
+  </song>
+  <song id="102">
+    <title>test add CLI</title>
+    <artist>test cli</artist>
+    <album/>
+    <genre/>
+    <bpm>67</bpm>
+    <length>0</length>
+    <explicit>false</explicit>
+    <rating>0</rating>
+    <cover/>
+    <price>0.0</price>
+    <count>10</count>
   </song>
 </songs>

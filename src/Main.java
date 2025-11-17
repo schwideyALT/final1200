@@ -1,16 +1,27 @@
+import javax.swing.UIManager;
+import javax.swing.plaf.FontUIResource;
+import java.awt.Font;
+
 public class Main {
+
     public static void main(String[] args) {
+        // Initialize SF Pro Display fonts
+        FontManager.init();
+
+        // Set default UI font to SF Pro Display Regular 14
+        Font base = FontManager.sfProPlain(14f);
+        setDefaultUIFont(new FontUIResource(base));
+
         boolean modeChosen = false;
         boolean cli = false;
 
-        // Flags still work
         for (String a : args) {
             if ("--cli".equalsIgnoreCase(a) || "-cli".equalsIgnoreCase(a)) { cli = true; modeChosen = true; }
             if ("--gui".equalsIgnoreCase(a) || "-gui".equalsIgnoreCase(a)) { cli = false; modeChosen = true; }
         }
 
         if (!modeChosen) {
-            // Try console prompt first
+            //prompt user to select interface
             try {
                 System.out.println("Choose mode:");
                 System.out.println("  1) GUI");
@@ -46,6 +57,17 @@ public class Main {
             VinylCli.run();
         } else {
             VinylGui.launch();
+        }
+    }
+
+    private static void setDefaultUIFont(FontUIResource f) {
+        java.util.Enumeration<Object> keys = UIManager.getDefaults().keys();
+        while (keys.hasMoreElements()) {
+            Object key = keys.nextElement();
+            Object value = UIManager.get(key);
+            if (value instanceof FontUIResource) {
+                UIManager.put(key, f);
+            }
         }
     }
 }

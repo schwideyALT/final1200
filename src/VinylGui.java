@@ -1,3 +1,4 @@
+import javax.swing.AbstractCellEditor;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
@@ -8,6 +9,7 @@ import javax.swing.table.*;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.*;
@@ -40,10 +42,17 @@ public class VinylGui extends JFrame {
     private TableRowSorter<Vinyl.SongTableModel> sorter;
     private JTextField searchField;
     private ColumnManager columnManager;
+    private boolean autoHideZero = false; // auto-hide rows with count==0
+
+    // Toast notification components
+    private JPanel toastPanel;
+    private JLabel toastLabel;
+    private javax.swing.Timer toastTimer;
+    private int toastTargetY;
+    private int toastState = 0; // 0=hidden, 1=sliding down, 2=visible, 3=sliding up
 
     // Track hovered row for hover-only Actions button
-    private int hoveredRow = -1;
-
+    //private int hoveredRow = -1;
     public VinylGui() {
         super("Music Library");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -101,12 +110,13 @@ public class VinylGui extends JFrame {
         table.setRowSorter(sorter);
 
         setColumnWidths();
-        // Hide header text for Cover (index 1) and Explicit (index 8)
+        // Hide header text for Cover (index 1) and Explicit (index 8) and actions
         TableColumnModel cm = table.getColumnModel();
         cm.getColumn(1).setHeaderValue("");
         cm.getColumn(8).setHeaderValue("");
-        cm.getColumn(9).setHeaderValue("");
-        cm.getColumn(10).setHeaderValue("");
+        cm.getColumn(12).setHeaderValue("");
+        // Do not hide headers for Rating, Price, Count so users can see titles
+        // Adjusted: Actions header will remain default too
         header.revalidate();
         header.repaint();
 
@@ -126,16 +136,18 @@ public class VinylGui extends JFrame {
         table.getColumnModel().getColumn(8).setCellRenderer(new VinylUiKit.ExplicitRenderer()); // Explicit centered
         table.getColumnModel().getColumn(9).setCellRenderer(new VinylUiKit.RatingRenderer());
         table.getColumnModel().getColumn(9).setCellEditor(new VinylUiKit.RatingEditor());
-        table.getColumnModel().getColumn(10).setCellRenderer(new ActionsRenderer());
-        table.getColumnModel().getColumn(10).setCellEditor(new ActionsEditor());
-
+        // Price (10) and Count (11) use default renderers
+        table.getColumnModel().getColumn(10).setCellRenderer(new VinylGui.PriceRenderer());
+        table.getColumnModel().getColumn(11).setCellRenderer(new VinylGui.CountRenderer());
+        table.getColumnModel().getColumn(12).setCellRenderer(new VinylGui.ActionsRenderer());
+        table.getColumnModel().getColumn(12).setCellEditor(new VinylGui.ActionsEditor());
         // Track hover for actions cell AND for whole-row band shading (on hover, not click)
         table.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
                 int viewCol = table.columnAtPoint(e.getPoint());
                 int viewRow = table.rowAtPoint(e.getPoint());
-                int actionsViewCol = table.convertColumnIndexToView(10);
+                int actionsViewCol = table.convertColumnIndexToView(12);
 
                 // update actions hover: only when cursor is over the 28x28 kebob box
                 int prevActionsRow = hoveredActionsRow;
@@ -202,6 +214,96 @@ public class VinylGui extends JFrame {
         getContentPane().add(root, BorderLayout.CENTER);
 
         columnManager = new ColumnManager(table);
+
+        // Initialize toast overlay
+        initToast();
+    }
+
+    // Create the toast panel once and add it to the frame's layered pane
+    private void initToast() {
+        if (toastPanel != null) return;
+
+        toastPanel = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(new Color(36, 36, 36, 240));
+                int arc = 14;
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        toastPanel.setOpaque(false);
+        toastPanel.setBorder(new EmptyBorder(8, 16, 8, 16));
+
+        toastLabel = new JLabel();
+        toastLabel.setForeground(FG);
+        toastLabel.setFont(toastLabel.getFont().deriveFont(Font.PLAIN, 13f));
+        toastPanel.add(toastLabel, BorderLayout.CENTER);
+
+        JLayeredPane lp = getLayeredPane();
+        int width = getWidth();
+        int height = 40;
+        int x = (width - 320) / 2; // fixed width area, centered
+        toastTargetY = 16;         // where it rests when visible
+        toastPanel.setBounds(x, -height, 320, height);
+        lp.add(toastPanel, JLayeredPane.POPUP_LAYER);
+        toastPanel.setVisible(false);
+    }
+
+    // Show a sliding toast at the top of the main window
+    private void showToast(String message) {
+        initToast();
+        toastLabel.setText(message);
+
+        JLayeredPane lp = getLayeredPane();
+        int width = getWidth();
+        int height = toastPanel.getHeight();
+        int x = (width - toastPanel.getWidth()) / 2;
+        toastPanel.setBounds(x, toastPanel.getY(), toastPanel.getWidth(), height);
+
+        if (toastTimer != null && toastTimer.isRunning()) {
+            toastTimer.stop();
+        }
+
+        toastPanel.setVisible(true);
+        toastState = 1; // start sliding down
+
+        toastTimer = new javax.swing.Timer(16, new ActionListener() {
+            long visibleStart = 0;
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int y = toastPanel.getY();
+
+                if (toastState == 1) { // sliding down
+                    int newY = y + 10;
+                    if (newY >= toastTargetY) {
+                        newY = toastTargetY;
+                        toastState = 2;
+                        visibleStart = System.currentTimeMillis();
+                    }
+                    toastPanel.setLocation(toastPanel.getX(), newY);
+                } else if (toastState == 2) { // visible, wait
+                    if (System.currentTimeMillis() - visibleStart > 1600) { // ~1.6s
+                        toastState = 3;
+                    }
+                } else if (toastState == 3) { // sliding up
+                    int newY = y - 10;
+                    if (newY <= -height) {
+                        newY = -height;
+                        toastPanel.setVisible(false);
+                        toastTimer.stop();
+                        toastState = 0;
+                    }
+                    toastPanel.setLocation(toastPanel.getX(), newY);
+                }
+                lp.repaint();
+            }
+        });
+        toastTimer.start();
     }
 
     private JMenuBar buildMenuBar() {
@@ -240,28 +342,44 @@ public class VinylGui extends JFrame {
         // Mode menu to switch to CLI
         JMenu mode = createTopMenu("Mode");
         JMenuItem switchToCli = new JMenuItem("Switch to CLI");
+        JCheckBoxMenuItem inStockOnly = new JCheckBoxMenuItem("Only show items in stock", false);
         switchToCli.addActionListener(e -> {
             // Close GUI and start CLI in a background thread
             dispose();
             new Thread(VinylCli::run, "Vinyl-CLI").start();
         });
+        inStockOnly.addActionListener(e -> setAutoHideZeroCount(inStockOnly.isSelected()));
+        // keep the checkbox state in sync if needed elsewhere
+        inStockOnly.setSelected(autoHideZero);
+
         mode.add(switchToCli);
+        mode.addSeparator();
+        mode.add(inStockOnly);
         bar.add(mode);
 
         return bar;
     }
 
+    public void setAutoHideZeroCount(boolean on) {
+        this.autoHideZero = on;
+        applyFilter();
+    }
+
+
     private JMenu buildViewMenu() {
         JMenu view = createTopMenu("View");
-        String[] names = {"ID", "Cover", "Title", "Artist", "Album", "Genre", "BPM", "Length", "Explicit", "Rating", "Actions"};
+        String[] names = {"ID", "Cover", "Title", "Artist", "Album", "Genre", "BPM", "Length", "Explicit", "Rating", "Price", "Count", "Actions"};
         for (int i = 0; i < names.length; i++) {
             final int modelIndex = i;
             JCheckBoxMenuItem item = new JCheckBoxMenuItem("Show " + names[i], true);
             item.addActionListener(e -> columnManager.setVisible(modelIndex, item.isSelected()));
             view.add(item);
         }
+        // Style the View menu popup
+        VinylUiKit.stylePopup(view.getPopupMenu());
         return view;
     }
+
 
     // Rounded hover for top-level menus ("File", "View")
     private JMenu createTopMenu(String title) {
@@ -273,6 +391,8 @@ public class VinylGui extends JFrame {
                 setForeground(SUBFG);
                 setRolloverEnabled(true);
                 setBorder(new EmptyBorder(4, 10, 4, 10));
+                // Style this menu’s popup (File/Mode/View)
+                VinylUiKit.stylePopup(getPopupMenu());
                 addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseEntered(MouseEvent e) {
@@ -288,18 +408,20 @@ public class VinylGui extends JFrame {
                 });
             }
 
+
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 boolean over = hover || getModel().isRollover() || getModel().isArmed();
                 if (over) {
-                    g2.setColor(new Color(100, 100, 100)); // darker hover shade
+                    g2.setColor(new Color(36, 36, 36)); // darker hover shade
                     g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
                 }
                 g2.dispose();
                 super.paintComponent(g);
             }
+
         };
     }
 
@@ -374,10 +496,11 @@ public class VinylGui extends JFrame {
 
     private void applyFilter() {
         String q = searchField.getText();
-        if (q == null || q.trim().isEmpty()) sorter.setRowFilter(null);
-        else {
+        java.util.List<RowFilter<Vinyl.SongTableModel, Integer>> filters = new ArrayList<>();
+
+        if (q != null && !q.trim().isEmpty()) {
             String s = q.trim().toLowerCase();
-            sorter.setRowFilter(new RowFilter<Vinyl.SongTableModel, Integer>() {
+            filters.add(new RowFilter<Vinyl.SongTableModel, Integer>() {
                 @Override
                 public boolean include(Entry<? extends Vinyl.SongTableModel, ? extends Integer> entry) {
                     Vinyl.Song song = model.getSong(entry.getIdentifier());
@@ -385,7 +508,26 @@ public class VinylGui extends JFrame {
                 }
             });
         }
+
+        if (autoHideZero) {
+            filters.add(new RowFilter<Vinyl.SongTableModel, Integer>() {
+                @Override
+                public boolean include(Entry<? extends Vinyl.SongTableModel, ? extends Integer> entry) {
+                    Vinyl.Song song = model.getSong(entry.getIdentifier());
+                    return song.count > 0;
+                }
+            });
+        }
+
+        if (filters.isEmpty()) {
+            sorter.setRowFilter(null);
+        } else if (filters.size() == 1) {
+            sorter.setRowFilter(filters.get(0));
+        } else {
+            sorter.setRowFilter(RowFilter.andFilter(filters));
+        }
     }
+
 
     private void setColumnWidths() {
         TableColumnModel cols = table.getColumnModel();
@@ -399,7 +541,9 @@ public class VinylGui extends JFrame {
         setPrefWidth(cols.getColumn(7), 70);  // Length
         setPrefWidth(cols.getColumn(8), 30);   // Explicit
         setPrefWidth(cols.getColumn(9), 125);  // Rating
-        setPrefWidth(cols.getColumn(10), 25); // Actions
+        setPrefWidth(cols.getColumn(10), 90);  // Price
+        setPrefWidth(cols.getColumn(11), 80);  // Count
+        setPrefWidth(cols.getColumn(12), 25);  // Actions
     }
 
     private void setPrefWidth(TableColumn col, int w) {
@@ -521,7 +665,7 @@ public class VinylGui extends JFrame {
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-            int actionsViewCol = table.convertColumnIndexToView(10);
+            int actionsViewCol = table.convertColumnIndexToView(12);
             int viewRow = row;
             dots.setHover(viewRow == hoveredActionsRow && column == actionsViewCol);
             return holder;
@@ -542,7 +686,9 @@ public class VinylGui extends JFrame {
                 if (editingRow < 0) return;
                 int modelRow = table.convertRowIndexToModel(editingRow);
                 Vinyl.Song s = model.getSong(modelRow);
+                JPopupMenu.setDefaultLightWeightPopupEnabled(true);
                 JPopupMenu popup = buildActionsPopup(s, modelRow);
+                //popup.setLightWeightPopupEnabled(true);
                 popup.show(menuBtn, 0, menuBtn.getHeight());
             });
         }
@@ -554,6 +700,7 @@ public class VinylGui extends JFrame {
                     int modelRow = table.convertRowIndexToModel(editingRow);
                     Vinyl.Song s = model.getSong(modelRow);
                     JPopupMenu popup = buildActionsPopup(s, modelRow);
+                    popup.setLightWeightPopupEnabled(true);
                     popup.show(menuBtn, 0, menuBtn.getHeight());
                 }
             });
@@ -565,9 +712,44 @@ public class VinylGui extends JFrame {
         }
     }
 
+    // Transparent, right-aligned price renderer with two decimals
+    static final class PriceRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            setOpaque(false);
+            setForeground(FG);
+            setHorizontalAlignment(SwingConstants.RIGHT);
+            if (value instanceof Number) {
+                setText(String.format("%.2f", ((Number) value).doubleValue()));
+            } else {
+                setText("");
+            }
+            setBorder(new EmptyBorder(8, 12, 8, 12));
+            return this;
+        }
+    }
+
+    // Transparent, centered count renderer
+    static final class CountRenderer extends DefaultTableCellRenderer {
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+            super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            setOpaque(false);
+            setForeground(FG);
+            setHorizontalAlignment(SwingConstants.CENTER);
+            setText(value == null ? "" : value.toString());
+            setBorder(new EmptyBorder(8, 12, 8, 12));
+            return this;
+        }
+    }
+
 
     private JPopupMenu buildActionsPopup(Vinyl.Song s, int modelRow) {
+        // Use the same styled popup as the main menus
         JPopupMenu popup = new JPopupMenu();
+        popup.setLightWeightPopupEnabled(true);
+        VinylUiKit.stylePopup(popup);
 
         JMenuItem props = new JMenuItem("Properties...");
         props.addActionListener(e -> {
@@ -577,19 +759,72 @@ public class VinylGui extends JFrame {
             openPropertiesDialog(s, false);
         });
 
+        JMenuItem addInv = new JMenuItem("Add Inventory");
+        addInv.addActionListener(e -> {
+            if (table.isEditing() && table.getCellEditor() != null) {
+                table.getCellEditor().stopCellEditing();
+            }
+            Integer qty = promptAddQuantity();
+            if (qty == null || qty <= 0) return;
+            s.count += qty;
+            model.songUpdated(modelRow); // refresh + autosave via listeners
+            showToast("Added " + qty + " to inventory");
+        });
+
+
+        JMenuItem sell = new JMenuItem("Sell");
+        sell.addActionListener(e -> {
+            if (table.isEditing() && table.getCellEditor() != null) {
+                table.getCellEditor().stopCellEditing();
+            }
+            if (s.count <= 0) {
+                showNoInventoryDialog();
+                return;
+            }
+            while (true) {
+                Integer qty = promptSellQuantityUnbounded(s.count);
+                if (qty == null) return;
+                if (qty <= 0) return;
+
+                if (qty > s.count) {
+                    int choice = showOverSellDialog(qty, s.count);
+                    if (choice == 0) {
+                        qty = s.count;
+                    } else if (choice == 1) {
+                        continue;
+                    } else {
+                        return;
+                    }
+                }
+
+                s.count -= qty;
+                model.songUpdated(modelRow);
+                showToast("Sold " + qty + " item" + (qty == 1 ? "" : "s"));
+                return;
+            }
+        });
+
+
         JMenuItem delete = new JMenuItem("Delete");
         delete.addActionListener(e -> {
             if (table.isEditing() && table.getCellEditor() != null) {
                 table.getCellEditor().stopCellEditing();
             }
             model.removeAt(modelRow);
+            showToast("Song deleted");
         });
 
+
         popup.add(props);
+        popup.addSeparator();
+        popup.add(addInv);
+        popup.add(sell);
         popup.addSeparator();
         popup.add(delete);
         return popup;
     }
+
+
 
 
     private JButton makeKebabButton() {
@@ -627,9 +862,199 @@ public class VinylGui extends JFrame {
         b.setMinimumSize(new Dimension(28, 28));
         b.setMaximumSize(new Dimension(28, 28));
         return b;
+
+
     }
 
 
+
+    private Integer promptSellQuantityUnbounded(int displayMax) {
+        final JDialog dlg = new JDialog(this, "Sell Item", true);
+        dlg.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        dlg.setLayout(new BorderLayout(15, 15));
+        dlg.getContentPane().setBackground(BG);
+
+        JPanel center = new JPanel(new GridBagLayout());
+        center.setOpaque(true);
+        center.setBackground(BG);
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.insets = new Insets(12, 12, 12, 12);
+        gc.anchor = GridBagConstraints.WEST;
+        gc.fill = GridBagConstraints.HORIZONTAL;
+        gc.gridx = 0; gc.gridy = 0;
+
+        JLabel lbl = new JLabel("Quantity to sell (max " + displayMax + "):");
+        lbl.setForeground(FG);
+        center.add(lbl, gc);
+
+        gc.gridy = 1;
+        IntField qtyField = new IntField("1");
+        qtyField.setForeground(FG);
+        qtyField.setCaretColor(FG);
+        qtyField.setColumns(10);
+        center.add(qtyField, gc);
+
+        JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 8));
+        actions.setBackground(BG);
+        JButton cancel = VinylUiKit.grayButton("Cancel");
+        JButton ok = VinylUiKit.redButton("Sell");
+
+        final Integer[] result = new Integer[1];
+
+        cancel.addActionListener(e -> {
+            result[0] = null;
+            dlg.dispose();
+        });
+        ok.addActionListener(e -> {
+            String t = qtyField.getText().trim();
+            int val = 0;
+            try { val = t.isEmpty() ? 0 : Integer.parseInt(t); } catch (Exception ignored) {}
+            if (val < 1) val = 1;
+            // Note: no clamping here
+            result[0] = val;
+            dlg.dispose();
+        });
+
+        actions.add(cancel);
+        actions.add(ok);
+
+        dlg.add(center, BorderLayout.CENTER);
+        dlg.add(actions, BorderLayout.SOUTH);
+        dlg.pack();
+        dlg.setLocationRelativeTo(this);
+        dlg.setVisible(true);
+        return result[0];
+    }
+
+    // Pill-buttons dialog for oversell: returns 0=Sell max, 1=Re-enter, 2=Cancel
+    private int showOverSellDialog(int requested, int available) {
+        final JDialog dlg = new JDialog(this, "Sell", true);
+        dlg.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        dlg.setLayout(new BorderLayout(15, 15));
+        dlg.getContentPane().setBackground(BG);
+
+        // Message
+        JPanel center = new JPanel(new GridBagLayout());
+        center.setOpaque(true);
+        center.setBackground(BG);
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.insets = new Insets(12, 16, 12, 16);
+        gc.gridx = 0; gc.gridy = 0; gc.anchor = GridBagConstraints.WEST;
+
+        JLabel msg = new JLabel(String.format("Requested %d exceeds available (%d).", requested, available));
+        msg.setForeground(FG);
+        center.add(msg, gc);
+
+        // Pill buttons
+        JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 12));
+        actions.setBackground(BG);
+        JButton sellMax = VinylUiKit.redButton("Sell " + available);
+        JButton reenter = VinylUiKit.grayButton("Re-enter");
+        JButton cancel = VinylUiKit.grayButton("Cancel");
+
+        final int[] result = {-1};
+        sellMax.addActionListener(e -> { result[0] = 0; dlg.dispose(); });
+        reenter.addActionListener(e -> { result[0] = 1; dlg.dispose(); });
+        cancel.addActionListener(e -> { result[0] = 2; dlg.dispose(); });
+
+        actions.add(cancel);
+        actions.add(reenter);
+        actions.add(sellMax);
+
+        dlg.add(center, BorderLayout.CENTER);
+        dlg.add(actions, BorderLayout.SOUTH);
+        dlg.pack();
+        dlg.setLocationRelativeTo(this);
+        dlg.setVisible(true);
+        return result[0];
+    }
+
+    // Pill-button dialog for "no inventory to sell"
+    private void showNoInventoryDialog() {
+        final JDialog dlg = new JDialog(this, "Sell", true);
+        dlg.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        dlg.setLayout(new BorderLayout(15, 15));
+        dlg.getContentPane().setBackground(BG);
+
+        JPanel center = new JPanel(new GridBagLayout());
+        center.setOpaque(true);
+        center.setBackground(BG);
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.insets = new Insets(12, 16, 12, 16);
+        gc.gridx = 0; gc.gridy = 0; gc.anchor = GridBagConstraints.WEST;
+
+        JLabel msg = new JLabel("No inventory to sell.");
+        msg.setForeground(FG);
+        center.add(msg, gc);
+
+        JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 12));
+        actions.setBackground(BG);
+        JButton ok = VinylUiKit.redButton("OK");
+        ok.addActionListener(e -> dlg.dispose());
+        actions.add(ok);
+
+        dlg.add(center, BorderLayout.CENTER);
+        dlg.add(actions, BorderLayout.SOUTH);
+        dlg.pack();
+        dlg.setLocationRelativeTo(this);
+        dlg.setVisible(true);
+    }
+
+
+
+    private Integer promptAddQuantity() {
+        final JDialog dlg = new JDialog(this, "Add Inventory", true);
+        dlg.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        dlg.setLayout(new BorderLayout(15, 15));
+        dlg.getContentPane().setBackground(BG);
+
+        JPanel center = new JPanel(new GridBagLayout());
+        center.setOpaque(true);
+        center.setBackground(BG);
+        GridBagConstraints gc = new GridBagConstraints();
+        gc.insets = new Insets(12, 12, 12, 12);
+        gc.anchor = GridBagConstraints.WEST;
+        gc.fill = GridBagConstraints.HORIZONTAL;
+        gc.gridx = 0; gc.gridy = 0;
+
+        JLabel lbl = new JLabel("Quantity to add:");
+        lbl.setForeground(FG);
+        center.add(lbl, gc);
+
+        gc.gridy = 1;
+        IntField qtyField = new IntField("1");
+        qtyField.setForeground(FG);
+        qtyField.setCaretColor(FG);
+        qtyField.setColumns(10);
+        center.add(qtyField, gc);
+
+        JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 8));
+        actions.setBackground(BG);
+        JButton cancel = VinylUiKit.grayButton("Cancel");
+        JButton ok = VinylUiKit.redButton("Add");
+
+        final Integer[] result = new Integer[1];
+
+        cancel.addActionListener(e -> { result[0] = null; dlg.dispose(); });
+        ok.addActionListener(e -> {
+            String t = qtyField.getText().trim();
+            int val = 0;
+            try { val = t.isEmpty() ? 0 : Integer.parseInt(t); } catch (Exception ignored) {}
+            if (val < 1) val = 1;
+            result[0] = val;
+            dlg.dispose();
+        });
+
+        actions.add(cancel);
+        actions.add(ok);
+
+        dlg.add(center, BorderLayout.CENTER);
+        dlg.add(actions, BorderLayout.SOUTH);
+        dlg.pack();
+        dlg.setLocationRelativeTo(this);
+        dlg.setVisible(true);
+        return result[0];
+    }
 
 
     // ---------- Column show/hide manager ----------
@@ -693,6 +1118,9 @@ public class VinylGui extends JFrame {
         private StarBar ratingBar;
         private JLabel coverPreview;
         private String selectedCoverPath;
+        // New fields
+        private JTextField priceField;
+        private IntField countField;
 
         PropertiesDialog(Frame owner, Vinyl.Song song, boolean isNew) {
             super(owner, isNew ? "Add Song" : "Song Properties", true);
@@ -711,29 +1139,29 @@ public class VinylGui extends JFrame {
 
             tabs.addTab("General", buildGeneralTab());
             tabs.addTab("Cover", buildCoverTab());
+            tabs.addTab("Inventory", buildInventoryTab());
 
             JPanel actions = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             actions.setBackground(BG);
             JButton cancel = VinylUiKit.grayButton("Cancel");
             JButton save = VinylUiKit.redButton("Save");
-            JButton deleteCover = VinylUiKit.grayButton("Delete Cover");
             cancel.addActionListener(e -> dispose());
             save.addActionListener(e -> {
                 if (applyChanges()) {
                     saved = true;
+                    // Notify parent that changes have been saved
+                    if (owner instanceof VinylGui gui) {
+                        gui.showToast("Song saved");
+                    }
                     dispose();
                 }
             });
-            deleteCover.addActionListener(e -> {
-                selectedCoverPath = null; // clear selected cover
-                updateCoverPreview();     // refresh preview immediately
-            });
             actions.add(cancel);
-            actions.add(deleteCover);
             actions.add(save);
             add(tabs, BorderLayout.CENTER);
             add(actions, BorderLayout.SOUTH);
         }
+
 
         private JPanel buildGeneralTab() {
             JPanel p = new JPanel(new GridBagLayout());
@@ -741,7 +1169,7 @@ public class VinylGui extends JFrame {
             // Remove panel border to match "no border" requirement
             p.setBorder(BorderFactory.createEmptyBorder());
             GridBagConstraints gc = new GridBagConstraints();
-            gc.insets = new Insets(8, 8, 8, 8);
+            gc.insets = new Insets(4, 8, 8, 8);
             gc.anchor = GridBagConstraints.WEST;
             gc.fill = GridBagConstraints.HORIZONTAL;
             gc.weightx = 1.0;
@@ -758,6 +1186,8 @@ public class VinylGui extends JFrame {
             explicitBox.setBackground(BG);
             explicitBox.setOpaque(false);
             ratingBar = new StarBar(song.rating);
+            // moved priceField and countField to Inventory tab
+
             int r = 0;
             addRow(p, gc, r++, "ID", idField);
             addRow(p, gc, r++, "Title", titleField);
@@ -771,6 +1201,26 @@ public class VinylGui extends JFrame {
             return p;
         }
 
+        private JPanel buildInventoryTab() {
+            JPanel p = new JPanel(new GridBagLayout());
+            p.setBackground(BG);
+            p.setBorder(BorderFactory.createEmptyBorder());
+            GridBagConstraints gc = new GridBagConstraints();
+            gc.insets = new Insets(8, 8, 8, 8);
+            gc.anchor = GridBagConstraints.WEST;
+            gc.fill = GridBagConstraints.HORIZONTAL;
+            gc.weightx = 1.0;
+
+            // Initialize fields moved from General to Inventory
+            priceField = textField(song.price == 0.0 ? "" : String.valueOf(song.price));
+            countField = new IntField(String.valueOf(song.count));
+
+            int r = 0;
+            addRow(p, gc, r++, "Price", priceField);
+            addRow(p, gc, r++, "Count", countField);
+            return p;
+        }
+
         private JPanel buildCoverTab() {
             JPanel p = new JPanel(new BorderLayout());
             p.setBackground(BG);
@@ -780,39 +1230,147 @@ public class VinylGui extends JFrame {
             coverPreview.setHorizontalAlignment(SwingConstants.CENTER);
             coverPreview.setOpaque(true);
             coverPreview.setBackground(new Color(36, 36, 36));
+            // Larger preview area to show big artwork
             coverPreview.setPreferredSize(new Dimension(300, 300));
+
             updateCoverPreview();
-            JButton choose = VinylUiKit.redButton("Choose Image");
-            choose.addActionListener(e -> {
-                JFileChooser fc = new JFileChooser();
-                fc.setDialogTitle("Choose cover image");
-                fc.setFileFilter(new FileNameExtensionFilter("Images", "jpg", "jpeg", "png", "gif"));
-                if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-                    File f = fc.getSelectedFile();
-                    selectedCoverPath = f.getAbsolutePath();
-                    updateCoverPreview();
-                }
-            });
+
+            JButton artworkButton = makeArtworkButton();
+
             JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
             bottom.setBackground(PANEL);
-            bottom.add(choose);
+            bottom.add(artworkButton);
             p.add(coverPreview, BorderLayout.CENTER);
             p.add(bottom, BorderLayout.SOUTH);
             return p;
         }
 
+        private JButton makeArtworkButton() {
+            // Use HTML so "Add" and "Artwork" are red, "+" is white
+            String label =
+                    "<html>" + "<span style='color: #FFFFFF;'>+  </span>" +
+                            "<span style='color: rgb(210,54,54);'> Add </span>" +
+                            "<span style='color: rgb(210,54,54);'> Artwork</span>" +
+                            "</html>";
+
+            JButton b = new JButton(label) {
+                {
+                    setRolloverEnabled(true);
+                }
+
+                @Override
+                protected void paintComponent(Graphics g) {
+                    super.paintComponent(g);
+                    if (getModel().isRollover()) {
+                        Graphics2D g2 = (Graphics2D) g.create();
+                        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                        int pad = 2;
+                        // Same soft rounded hover background as the kebab button
+                        g2.setColor(new Color(200, 200, 200, 40));
+                        g2.fillRoundRect(pad, pad,
+                                getWidth() - pad * 2 - 1,
+                                getHeight() - pad * 2 - 1,
+                                10, 10);
+                        g2.dispose();
+                    }
+                }
+            };
+            b.setOpaque(false);
+            b.setContentAreaFilled(false);
+            b.setFocusPainted(false);
+            b.setBorderPainted(false);
+            b.setBorder(new EmptyBorder(6, 12, 6, 12));
+            b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
+            b.addActionListener(e -> {
+                // If no artwork yet, go straight to chooser
+                if (selectedCoverPath == null || selectedCoverPath.isEmpty()) {
+                    chooseArtwork();
+                    return;
+                }
+
+                // If artwork exists, show a small menu for change/remove
+                // Use rounded popup directly instead of stylePopup
+                JPopupMenu menu = new VinylUiKit.RoundedPopupMenu();
+                menu.setLightWeightPopupEnabled(true);
+
+
+                JMenuItem change = new JMenuItem("Change Artwork...");
+                JMenuItem remove = new JMenuItem("Remove Artwork");
+
+                change.addActionListener(ev -> chooseArtwork());
+                remove.addActionListener(ev -> {
+                    selectedCoverPath = null;
+                    updateCoverPreview();
+                });
+
+                menu.add(change);
+                menu.add(remove);
+                menu.show(b, 0, b.getHeight());
+            });
+
+            return b;
+        }
+
+
+        private void chooseArtwork() {
+            JFileChooser fc = new JFileChooser();
+            fc.setDialogTitle("Choose cover image");
+            fc.setFileFilter(new FileNameExtensionFilter("Images", "jpg", "jpeg", "png", "gif"));
+            if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+                File f = fc.getSelectedFile();
+                selectedCoverPath = f.getAbsolutePath();
+                updateCoverPreview();
+            }
+        }
+
         private void updateCoverPreview() {
-            ImageIcon icon;
-            if (selectedCoverPath == null || selectedCoverPath.isEmpty()) icon = Vinyl.Song.placeholderIcon(280, 280);
-            else {
+            final int PREVIEW_SIZE = 300;
+            ImageIcon icon = null;
+
+            // 1) Try to load from selectedCoverPath (URL or file), in high resolution
+            if (selectedCoverPath != null && !selectedCoverPath.isEmpty()) {
                 try {
-                    java.awt.image.BufferedImage img = javax.imageio.ImageIO.read(new File(selectedCoverPath));
-                    Image scaled = img.getScaledInstance(280, 280, Image.SCALE_SMOOTH);
-                    icon = new ImageIcon(scaled);
+                    if (selectedCoverPath.startsWith("http://") || selectedCoverPath.startsWith("https://")) {
+                        // Apple Music-style URLs: swap trailing "/WxHbb.jpg" for "/600x600bb.jpg"
+                        String urlString = selectedCoverPath;
+                        int lastSlash = urlString.lastIndexOf('/');
+                        if (lastSlash != -1 && urlString.substring(lastSlash).matches("/\\d+x\\d+bb\\.jpg")) {
+                            urlString = urlString.substring(0, lastSlash) + "/300x300bb.jpg";
+                        }
+
+                        java.net.URL url = new java.net.URL(urlString);
+                        java.awt.image.BufferedImage img = javax.imageio.ImageIO.read(url);
+                        if (img != null) {
+                            Image scaled = img.getScaledInstance(PREVIEW_SIZE, PREVIEW_SIZE, Image.SCALE_SMOOTH);
+                            icon = new ImageIcon(scaled);
+                        }
+                    } else {
+                        // Local file path
+                        java.io.File f = new java.io.File(selectedCoverPath);
+                        java.awt.image.BufferedImage img = javax.imageio.ImageIO.read(f);
+                        if (img != null) {
+                            Image scaled = img.getScaledInstance(PREVIEW_SIZE, PREVIEW_SIZE, Image.SCALE_SMOOTH);
+                            icon = new ImageIcon(scaled);
+                        }
+                    }
                 } catch (Exception ex) {
-                    icon = Vinyl.Song.placeholderIcon(280, 280);
+                    // ignore and fall through to other options
                 }
             }
+
+            // 2) If that didn't work, fall back to the existing coverIcon (table thumbnail), scaled up
+            if (icon == null && song.coverIcon != null) {
+                Image img = song.coverIcon.getImage();
+                Image scaled = img.getScaledInstance(PREVIEW_SIZE, PREVIEW_SIZE, Image.SCALE_SMOOTH);
+                icon = new ImageIcon(scaled);
+            }
+
+            // 3) Final fallback: placeholder
+            if (icon == null) {
+                icon = Vinyl.Song.placeholderIcon(PREVIEW_SIZE, PREVIEW_SIZE);
+            }
+
             coverPreview.setIcon(icon);
         }
 
@@ -832,6 +1390,11 @@ public class VinylGui extends JFrame {
                 song.rating = ratingBar.getValue();
                 song.coverPath = selectedCoverPath;
                 song.coverIcon = null;
+                // Persist price and count (stored as double and int)
+                String priceTxt = priceField.getText().trim();
+                song.price = priceTxt.isEmpty() ? 0.0 : Double.parseDouble(priceTxt);
+                String countTxt = countField.getText().trim();
+                song.count = countTxt.isEmpty() ? 0 : Integer.parseInt(countTxt);
                 return true;
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Invalid input: " + ex.getMessage());
@@ -910,6 +1473,8 @@ public class VinylGui extends JFrame {
         protected void paintTabBackground(Graphics g, int tabPlacement, int tabIndex, int x, int y, int w, int h, boolean isSelected) {
             Graphics2D g2 = (Graphics2D) g.create();
             g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
             Color fill = isSelected ? new Color(46, 46, 46) : new Color(38, 38, 38);
             g2.setColor(fill);
             g2.fillRoundRect(x, y + 2, w, h - 4, ARC, ARC);
@@ -923,10 +1488,15 @@ public class VinylGui extends JFrame {
 
         @Override
         protected void paintText(Graphics g, int tabPlacement, Font font, FontMetrics metrics, int tabIndex, String title, Rectangle textRect, boolean isSelected) {
-            g.setFont(font);
-            g.setColor(FG);
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+
+            g2.setFont(font);
+            g2.setColor(FG);
             int y = textRect.y + metrics.getAscent();
-            g.drawString(title, textRect.x, y);
+            g2.drawString(title, textRect.x, y);
+            g2.dispose();
         }
 
         @Override
@@ -953,8 +1523,12 @@ public class VinylGui extends JFrame {
             for (int i = 1; i <= 5; i++) {
                 final int idx = i;
                 JLabel star = new JLabel("☆");
-                star.setFont(star.getFont().deriveFont(Font.PLAIN, 22f));
-                star.setForeground(new Color(255, 204, 64));
+                // Old:
+                star.setFont(FontManager.starFont(18f));
+
+                // New: explicitly use SF Pro Display for this component
+                //star.setFont(FontManager.sfProPlain(22f));
+                star.setForeground(RED);
                 star.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
                 star.addMouseListener(new MouseAdapter() {
                     public void mouseClicked(MouseEvent e) {
@@ -979,5 +1553,6 @@ public class VinylGui extends JFrame {
         private void refresh() {
             for (int i = 0; i < stars.size(); i++) stars.get(i).setText(i < value ? "★" : "☆");
         }
+
     }
 }
