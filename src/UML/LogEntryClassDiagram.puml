@@ -1,0 +1,30 @@
+@startuml
+class LogEntry {
+  {static} activityLog: java.util.List<LogEntry>
+  {static} FORMATTER: java.time.format.DateTimeFormatter
+  {static} LOG_FILE: java.io.File
+  --
+  -timestamp: java.time.LocalDateTime
+  -message: String
+  -songTitle: String
+  -totalPrice: double
+  --
+  +LogEntry(timestamp: java.time.LocalDateTime, message: String)
+  +LogEntry(timestamp: java.time.LocalDateTime, message: String, songTitle: String, totalPrice: double)
+  --
+  {static} logEvent(message: String): void
+  {static} logEvent(message: String, songTitle: String, totalPrice: double): void
+  --
+  +getTimestampText(): String
+  +getMessage(): String
+  +getSongTitle(): String
+  +getTotalPrice(): double
+  --
+  -loadFromDisk(): void
+  -appendToDisk(entry: LogEntry): void
+  -toCsvLine(entry: LogEntry): String
+  -escapeCsv(s: String): String
+  -parseCsvLine(line: String): LogEntry
+  -unquote(s: String): String
+}
+@enduml

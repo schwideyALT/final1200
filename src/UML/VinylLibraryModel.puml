@@ -1,0 +1,57 @@
+@startuml
+class Vinyl {
+  +Vinyl()
+  --
+  +main(args: String[]): void
+}
+
+class "Vinyl.Song" as Song {
+  +id: int
+  +title: String
+  +artist: String
+  +album: String
+  +genre: String
+  +bpm: int
+  +lengthSeconds: int
+  +explicit: boolean
+  +rating: int
+  +coverPath: String
+  +coverIcon: javax.swing.ImageIcon
+  +price: double
+  +count: int
+  --
+  +matches(q: String): boolean
+  +formatDuration(seconds: int): String
+  +parseDuration(text: String): int
+  +placeholderIcon(w: int, h: int): javax.swing.ImageIcon
+}
+
+class "Vinyl.SongTableModel" as SongTableModel {
+  -songs: java.util.List<Song>
+  --
+  +SongTableModel()
+  +getRowCount(): int
+  +getColumnCount(): int
+  +getValueAt(row: int, col: int): Object
+  +setValueAt(value: Object, row: int, col: int): void
+  +getSong(index: int): Song
+  +getAll(): java.util.List<Song>
+  +addSong(song: Song): void
+  +removeAt(index: int): void
+  +songUpdated(index: int): void
+  +indexOf(song: Song): int
+  +nextId(): int
+  +addChangeListener(listener: Runnable): void
+}
+
+class "Vinyl.XmlStore" as XmlStore {
+  +load(file: java.io.File): java.util.List<Song>
+  +save(file: java.io.File, songs: java.util.List<Song>): void
+}
+
+Vinyl ..> Song
+Vinyl ..> SongTableModel
+Vinyl ..> XmlStore
+SongTableModel "1" o-- "*" Song
+XmlStore ..> Song
+@enduml

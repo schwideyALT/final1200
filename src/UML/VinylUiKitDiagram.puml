@@ -1,0 +1,53 @@
+@startuml
+class VinylUiKit {
+  -VinylUiKit()
+  --
+  {static} BG: java.awt.Color
+  {static} PANEL: java.awt.Color
+  {static} FG: java.awt.Color
+  {static} SUBFG: java.awt.Color
+  {static} HEADER_BG: java.awt.Color
+  {static} RED: java.awt.Color
+  {static} RED_HOVER: java.awt.Color
+  {static} DEFAULT_STAR_FONT: java.awt.Font
+  --
+  {static} setSystemDefaults(): void
+  {static} wingdings(size: float): java.awt.Font
+  {static} loadIcon(path: String, w: int, h: int): javax.swing.ImageIcon
+  {static} redButton(text: String): javax.swing.JButton
+  {static} grayButton(text: String): javax.swing.JButton
+}
+
+class "VinylUiKit.StarBar" as KitStarBar extends javax.swing.JPanel {
+  -value: int
+  -stars: java.util.List<javax.swing.JLabel>
+  --
+  +setValue(v: int): void
+  +getValue(): int
+}
+
+class "VinylUiKit.RoundedPopupMenu" as RoundedPopupMenu extends javax.swing.JPopupMenu
+class "VinylUiKit.RoundedTextField" as RoundedTextField extends javax.swing.JTextField
+class "VinylUiKit.ColumnBandTable" as ColumnBandTable extends javax.swing.JTable
+class "VinylUiKit.HeaderRenderer" as HeaderRenderer extends javax.swing.table.DefaultTableCellRenderer
+class "VinylUiKit.TextCellRenderer" as TextCellRenderer extends javax.swing.table.DefaultTableCellRenderer
+class "VinylUiKit.CoverRenderer" as CoverRenderer extends javax.swing.table.DefaultTableCellRenderer
+class "VinylUiKit.ExplicitRenderer" as ExplicitRenderer extends javax.swing.table.DefaultTableCellRenderer
+class "VinylUiKit.RatingRenderer" as RatingRenderer extends javax.swing.table.DefaultTableCellRenderer
+class "VinylUiKit.RatingEditor" as RatingEditor extends javax.swing.AbstractCellEditor implements javax.swing.table.TableCellEditor
+class "VinylUiKit.RoundedScrollPane" as RoundedScrollPane extends javax.swing.JScrollPane
+class "VinylUiKit.MinimalScrollBarUI" as MinimalScrollBarUI extends javax.swing.plaf.basic.BasicScrollBarUI
+
+VinylUiKit o-- KitStarBar
+VinylUiKit o-- RoundedPopupMenu
+VinylUiKit o-- RoundedTextField
+VinylUiKit o-- ColumnBandTable
+VinylUiKit o-- HeaderRenderer
+VinylUiKit o-- TextCellRenderer
+VinylUiKit o-- CoverRenderer
+VinylUiKit o-- ExplicitRenderer
+VinylUiKit o-- RatingRenderer
+VinylUiKit o-- RatingEditor
+VinylUiKit o-- RoundedScrollPane
+VinylUiKit o-- MinimalScrollBarUI
+@enduml

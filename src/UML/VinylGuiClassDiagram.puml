@@ -1,0 +1,50 @@
+@startuml
+class VinylGui extends javax.swing.JFrame {
+  -table: javax.swing.JTable
+  -model: Vinyl.SongTableModel
+  -sorter: javax.swing.table.TableRowSorter<Vinyl.SongTableModel>
+  -searchField: javax.swing.JTextField
+  -columnManager: ColumnManager
+  -autoHideZero: boolean
+  --
+  -toastPanel: javax.swing.JPanel
+  -toastLabel: javax.swing.JLabel
+  -toastTimer: javax.swing.Timer
+  -toastTargetY: int
+  -toastState: int
+  --
+  +VinylGui()
+  --
+  +static launch(): void
+  -createSplashWindow(): javax.swing.JWindow
+  -buildMenuBar(): javax.swing.JMenuBar
+  -buildViewMenu(): javax.swing.JMenu
+  -buildTopBar(): javax.swing.JPanel
+  -applyFilter(): void
+  -setAutoHideZeroCount(on: boolean): void
+  -setColumnWidths(): void
+  -doImportXml(): void
+  -doExportXml(): void
+  -openPropertiesDialog(song: Vinyl.Song, isNew: boolean): void
+  -initToast(): void
+  -showToast(message: String): void
+  -showLogDialog(): void
+  -exportLogsToFile(): void
+}
+
+' Some key inner helper types (not fully expanded)
+class "VinylGui.ColumnManager" as ColumnManager
+class "VinylGui.PropertiesDialog" as PropertiesDialog
+class "VinylGui.IntField" as IntField
+class "VinylGui.StarBar" as DialogStarBar
+
+VinylGui ..> Vinyl
+VinylGui ..> Vinyl.SongTableModel
+VinylGui ..> VinylUiKit
+VinylGui ..> LogEntry
+
+VinylGui o-- ColumnManager
+VinylGui o-- PropertiesDialog
+VinylGui o-- IntField
+VinylGui o-- DialogStarBar
+@enduml

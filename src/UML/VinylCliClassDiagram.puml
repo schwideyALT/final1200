@@ -1,0 +1,30 @@
+@startuml
+class VinylCli {
+  -XML: java.io.File
+  -SHOW_ONLY_IN_STOCK: boolean
+  --
+  +VinylCli()
+  --
+  +static run(): void
+  -list(model: Vinyl.SongTableModel): void
+  -add(model: Vinyl.SongTableModel, arg: String): void
+  -edit(model: Vinyl.SongTableModel, arg: String): void
+  -sell(model: Vinyl.SongTableModel, id: int, count: int): void
+  -addInventory(model: Vinyl.SongTableModel, id: int, count: int): void
+  -delete(model: Vinyl.SongTableModel, arg: String): void
+  -rate(model: Vinyl.SongTableModel, arg: String): void
+  -explicit(model: Vinyl.SongTableModel, arg: String): void
+  -toggleInStockMode(arg: String): void
+  -viewLogs(): void
+  -exportLogsCli(arg: String): void
+  -escapeCsv(s: String): String
+  -parseInt(s: String, def: int): int
+  -parseDouble(s: String, def: double): double
+  -findById(model: Vinyl.SongTableModel, id: int): int
+}
+
+VinylCli ..> Vinyl
+VinylCli ..> Vinyl.SongTableModel
+VinylCli ..> VinylGui
+VinylCli ..> LogEntry
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+class FontManager {
+  -FontManager()
+  --
+  {static} starFont(size: float): java.awt.Font
+  {static} sfProPlain(size: float): java.awt.Font
+  {static} loadFont(resourcePath: String, size: float): java.awt.Font
+}
+@enduml
