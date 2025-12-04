@@ -24,30 +24,6 @@ public final class VinylUiKit {
         private int value;
         private final java.util.List<JLabel> stars = new ArrayList<>();
 
-        StarBar(int initial) {
-            super(new FlowLayout(FlowLayout.LEFT, 4, 0));
-            setOpaque(false);
-            setValue(initial);
-            for (int i = 1; i <= 5; i++) {
-                final int idx = i;
-                JLabel star = new JLabel("☆");
-                // Use Wingdine-based star font for dialog rating as well
-                star.setFont(FontManager.starFont(22f));
-                // Match table stars: all red
-                star.setForeground(VinylUiKit.RED);
-                star.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-                star.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(MouseEvent e) {
-                        setValue(idx);
-                    }
-                });
-                stars.add(star);
-                add(star);
-            }
-            refresh();
-        }
-
         void setValue(int v) {
             value = Math.max(0, Math.min(5, v));
             refresh();
@@ -99,70 +75,28 @@ public final class VinylUiKit {
 
         // Prefer lightweight popups globally so transparent, rounded corners
         // blend with our dark background instead of a heavyweight window.
+
+        //Color menuBg = new Color(40, 40, 40);
+        //Color menuSelBg = new Color(70, 70, 70);
+
         JPopupMenu.setDefaultLightWeightPopupEnabled(true);
 
-
-
-        // Core backgrounds
-        UIManager.put("Panel.background", PANEL);
-        UIManager.put("OptionPane.background", PANEL);
-        UIManager.put("OptionPane.messageForeground", FG);
-
-        // Text fields ...
-        // ...
-
-        // Menus and menu items
-        Color menuBg = new Color(40, 40, 40);
-        Color menuSelBg = new Color(70, 70, 70);
-
-        UIManager.put("Menu.background", menuBg);
-        UIManager.put("Menu.foreground", FG);
-        UIManager.put("Menu.opaque", Boolean.FALSE);
-
-        UIManager.put("MenuItem.background", menuBg);
-        UIManager.put("MenuItem.foreground", FG);
-        UIManager.put("MenuItem.opaque", Boolean.FALSE);
-
-        UIManager.put("Menu.selectionBackground", menuSelBg);
-        UIManager.put("MenuItem.selectionBackground", menuSelBg);
-        UIManager.put("Menu.selectionForeground", FG);
-        UIManager.put("MenuItem.selectionForeground", FG);
-
-        // Checkmark menu items (JCheckBoxMenuItem)
-        UIManager.put("CheckBoxMenuItem.background", menuBg);
-        UIManager.put("CheckBoxMenuItem.foreground", Color.WHITE);
-        //UIManager.put("CheckBoxMenuItem.selectionBackground", menuSelBg);
-        UIManager.put("CheckBoxMenuItem.selectionForeground", Color.WHITE);
-        UIManager.put("CheckBoxMenuItem.opaque", Boolean.FALSE);
-        UIManager.put("CheckBoxMenuItem.borderPainted", Boolean.FALSE);
-        // Use a custom red check icon that only paints when selected
         UIManager.put("CheckBoxMenuItem.checkIcon", new RedCheckIcon(RED));
+        UIManager.put("PopupMenu.border", BorderFactory.createEmptyBorder());
+        UIManager.put("PopupMenu.borderPainted", Boolean.FALSE);
 
-        // Popup menu defaults
-        UIManager.put("PopupMenu.background", menuBg);
-        UIManager.put("PopupMenu.foreground", FG);
-        UIManager.put("PopupMenu.border", BorderFactory.createEmptyBorder()); // no LAF border
-        UIManager.put("Popup.dropShadowPainted", Boolean.FALSE);
 
-        JPopupMenu.setDefaultLightWeightPopupEnabled(true);
     }
 
-    // ---------- Rounded popup menu ----------
-    // Use this class when you create popups for a fully rounded, opaque dark background.
-    public static final class RoundedPopupMenu extends JPopupMenu {
-        private final int radius = 12;
-        private final Color fill = new Color(34, 34, 34);
-        // make stroke fully transparent so no visible outline
-        private final Color stroke = new Color(0, 0, 0, 0);
 
+    // ---------- Rounded popup menu ----------
+    // Use this class as a convenience wrapper that applies stylePopup.
+    public static final class RoundedPopupMenu extends JPopupMenu {
         public RoundedPopupMenu() {
-            setOpaque(false);
-            setBorder(new EmptyBorder(6, 8, 6, 8));
-            setBorderPainted(false);
-            setBackground(new Color(0, 0, 0, 0));
-            setForeground(FG);
-            setLightWeightPopupEnabled(true);
+            super();
+            //VinylUiKit.stylePopup(this);
         }
+
 
 
         @Override
@@ -183,19 +117,16 @@ public final class VinylUiKit {
                                 RenderingHints.VALUE_ANTIALIAS_ON);
 
             // Rounded shape
+            float radius = 5;
             RoundRectangle2D shape =
                     new RoundRectangle2D.Float(0, 0, w - 1, h - 1, radius * 2, radius * 2);
 
             // 3) Fill rounded dark background
+            Color fill = new Color(0,0,0,128);
             g2.setColor(fill);
             g2.fill(shape);
 
             // 4) Optional stroke (transparent now)
-            if (stroke.getAlpha() > 0) {
-                g2.setColor(stroke);
-                g2.setStroke(new BasicStroke(1f));
-                g2.draw(shape);
-            }
 
             // 5) Clip all menu content to the rounded shape
             Shape oldClip = g2.getClip();
@@ -209,123 +140,6 @@ public final class VinylUiKit {
         @Override
         protected void paintComponent(Graphics g) {
             // nothing; all background is handled in paint()
-        }
-    }
-
-
-    // Rounded border that also paints a filled background, used when you need to
-    // restyle an existing JPopupMenu through stylePopup.
-    // Rounded border that also paints a filled background, used when you need to
-// restyle an existing JPopupMenu through stylePopup.
-    private static final class RoundedPopupBorder implements Border {
-        private final int radius;
-        private final Color fill;
-        private final Color stroke;
-        private final Insets insets;
-
-        RoundedPopupBorder(int radius, Color fill, Color stroke) {
-            this.radius = radius;
-            this.fill = fill;
-            // transparent stroke if you want no visible outline
-            this.stroke = stroke; // or new Color(0, 0, 0, 0) for no border line
-            this.insets = new Insets(6, 8, 6, 8);
-        }
-
-        @Override
-        public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-            Graphics2D g2 = (Graphics2D) g.create();
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-            g2.setColor(fill);
-            g2.fillRoundRect(x, y, width - 1, height - 1, radius * 2, radius * 2);
-
-            if (stroke.getAlpha() > 0) {
-                g2.setColor(stroke);
-                g2.setStroke(new BasicStroke(1f));
-                g2.drawRoundRect(x, y, width - 1, height - 1, radius * 2, radius * 2);
-            }
-
-            g2.dispose();
-
-            if (c instanceof JComponent jc) {
-                jc.setOpaque(false);
-                jc.setBackground(new Color(0, 0, 0, 0));
-            }
-        }
-
-        @Override
-        public Insets getBorderInsets(Component c) {
-            return insets;
-        }
-
-        @Override
-        public boolean isBorderOpaque() {
-            return false;
-        }
-    }
-
-
-    // Rounded menu item for dropdowns and popup menus, opaque dark background and white text
-    public static class RoundedMenuItem extends JMenuItem {
-        private final int radius = 10;
-
-        public RoundedMenuItem(String text) {
-            super(text);
-            init();
-        }
-
-        public RoundedMenuItem(Action action) {
-            super(action);
-            init();
-        }
-
-        private void init() {
-            setOpaque(false);
-            setForeground(FG);
-            setBackground(new Color(40, 40, 40));
-            setBorder(new EmptyBorder(6, 12, 6, 12));
-            setUI(new BasicMenuItemUI() {
-                @Override
-                public void paint(Graphics g, JComponent c) {
-                    JMenuItem item = (JMenuItem) c;
-                    Graphics2D g2 = (Graphics2D) g.create();
-                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-                    int w = c.getWidth();
-                    int h = c.getHeight();
-
-                    ButtonModel model = item.getModel();
-                    Color bg = new Color(40, 40, 40);
-                    if (model.isArmed() || model.isSelected()) {
-                        bg = new Color(70, 70, 70);
-                    }
-
-                    g2.setColor(bg);
-                    g2.fillRoundRect(0, 0, w - 1, h - 1, radius * 2, radius * 2);
-
-                    g2.setColor(item.getForeground());
-                    g2.setFont(item.getFont());
-                    FontMetrics fm = g2.getFontMetrics();
-                    String text = item.getText();
-                    Icon icon = item.getIcon();
-
-                    int textX = 12;
-                    int iconY = (h - (icon == null ? 0 : icon.getIconHeight())) / 2;
-                    int textY = (h - fm.getHeight()) / 2 + fm.getAscent();
-
-                    if (icon != null) {
-                        int iconX = 8;
-                        icon.paintIcon(c, g2, iconX, iconY);
-                        textX = iconX + icon.getIconWidth() + 6;
-                    }
-
-                    if (text != null && !text.isEmpty()) {
-                        g2.drawString(text, textX, textY);
-                    }
-
-                    g2.dispose();
-                }
-            });
         }
     }
 
@@ -395,11 +209,6 @@ public final class VinylUiKit {
             this(text, 12);
         }
 
-        public RoundedTextField(int columns) {
-            this("", 12);
-            setColumns(columns);
-        }
-
         public RoundedTextField(String text, int radius) {
             super(text);
             this.radius = radius;
@@ -451,66 +260,6 @@ public final class VinylUiKit {
         }
     }
 
-    // Apply rounded dark styling to any JPopupMenu that you already created
-    public static void stylePopup(JPopupMenu popup) {
-        if (popup == null) return;
-        JPopupMenu.setDefaultLightWeightPopupEnabled(true);
-        popup.setLightWeightPopupEnabled(true);
-
-        // We no longer rely on true transparency; use an opaque popup
-        popup.setOpaque(true);
-        popup.setBackground(BG); // match app background
-        popup.setBorderPainted(false);
-        popup.setBorder(BorderFactory.createEmptyBorder(6, 8, 6, 8));
-        popup.setForeground(FG);
-
-        // Custom UI delegate that paints our rounded dark background
-        popup.setUI(new BasicPopupMenuUI() {
-            @Override
-            public void paint(Graphics g, JComponent c) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-                int w = c.getWidth();
-                int h = c.getHeight();
-                int radius = 12;
-
-                // 1) Clear the area with the app background color instead of full transparency
-                g2.setComposite(AlphaComposite.SrcOver);
-                g2.setColor(BG); // or PANEL, depending on what blends best
-                g2.fillRect(0, 0, w, h);
-
-                // Define rounded clip
-                RoundRectangle2D clipShape =
-                        new RoundRectangle2D.Float(0, 0, w - 1, h - 1, radius * 2, radius * 2);
-
-                // 2) Fill rounded dark background
-                g2.setColor(new Color(34, 34, 34));
-                g2.fill(clipShape);
-
-                // Optional stroke (kept transparent)
-                Color stroke = new Color(0, 0, 0, 0);
-                if (stroke.getAlpha() > 0) {
-                    g2.setColor(stroke);
-                    g2.setStroke(new BasicStroke(1f));
-                    g2.draw(clipShape);
-                }
-
-                // 3) Clip all menu content to the rounded shape
-                Shape oldClip = g2.getClip();
-                g2.setClip(clipShape);
-                super.paint(g2, c);
-                g2.setClip(oldClip);
-
-                g2.dispose();
-            }
-        });
-
-        popup.putClientProperty("JPopupMenu.firePopupMenuCanceledOnExit", Boolean.TRUE);
-    }
-
-
-    // ---------- Column-banded JTable ----------
     public static final class ColumnBandTable extends JTable {
         public ColumnBandTable(TableModel model) {
             super(model);
@@ -553,8 +302,6 @@ public final class VinylUiKit {
         }
     }
 
-    // Dummy text renderer placeholder to keep this file compiling in isolation
-
     // ---------- Header renderer ----------
     public static final class HeaderRenderer extends DefaultTableCellRenderer {
         public HeaderRenderer() { setHorizontalAlignment(LEFT); }
@@ -587,7 +334,7 @@ public final class VinylUiKit {
                 return p;
             }
 
-            // Determine which column is sorted and its direction
+            // determine which column is sorted and its direction
             Icon arrow;
             RowSorter<? extends TableModel> rs = table.getRowSorter();
             boolean isSortedCol = false;
@@ -787,15 +534,69 @@ public final class VinylUiKit {
 
     // ---------- Minimal scrollbars ----------
     public static final class MinimalScrollBarUI extends BasicScrollBarUI {
-        @Override protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {}
-        @Override protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {}
-        @Override protected Dimension getMinimumThumbSize() { return new Dimension(0, 0); }
-        @Override protected Dimension getMaximumThumbSize() { return new Dimension(0, 0); }
-        @Override protected JButton createDecreaseButton(int orientation) { return zero(); }
-        @Override protected JButton createIncreaseButton(int orientation) { return zero(); }
-        private JButton zero() { JButton b = new JButton(); b.setPreferredSize(new Dimension(0,0)); b.setOpaque(false); b.setContentAreaFilled(false); b.setBorder(null); return b; }
-        @Override public Dimension getPreferredSize(JComponent c) { return new Dimension(0,0); }
 
+        @Override
+        protected void configureScrollBarColors() {
+            thumbColor = new Color(90, 90, 90, 210);
+            trackColor = new Color(0, 0, 0, 0); // fully transparent; parent background shows through
+        }
+
+        @Override
+        protected void paintTrack(Graphics g, JComponent c, Rectangle trackBounds) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(trackColor);
+            g2.fillRect(trackBounds.x, trackBounds.y, trackBounds.width, trackBounds.height);
+            g2.dispose();
+        }
+
+        @Override
+        protected void paintThumb(Graphics g, JComponent c, Rectangle thumbBounds) {
+            if (!c.isEnabled() || thumbBounds.isEmpty()) {
+                return;
+            }
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            int x = thumbBounds.x;
+            int y = thumbBounds.y;
+            int w = thumbBounds.width;
+            int h = thumbBounds.height;
+
+            int arc = 8;
+            Color base = thumbColor != null ? thumbColor : new Color(90, 90, 90, 210);
+            if (isThumbRollover()) {
+                base = base.brighter();
+            }
+
+            g2.setColor(base);
+            g2.fillRoundRect(x + 1, y + 1, w - 2, h - 2, arc, arc);
+            g2.dispose();
+        }
+
+        @Override
+        protected JButton createDecreaseButton(int orientation) { return zero(); }
+        @Override
+        protected JButton createIncreaseButton(int orientation) { return zero(); }
+
+        private JButton zero() {
+            JButton b = new JButton();
+            b.setPreferredSize(new Dimension(0, 0));
+            b.setOpaque(false);
+            b.setContentAreaFilled(false);
+            b.setBorder(null);
+            return b;
+        }
+
+        @Override
+        public Dimension getPreferredSize(JComponent c) {
+            // Thin bar, vertical or horizontal depending on orientation
+            if (scrollbar != null && scrollbar.getOrientation() == Adjustable.HORIZONTAL) {
+                return new Dimension(0, 8);
+            } else {
+                return new Dimension(8, 0);
+            }
+        }
     }
 
 }

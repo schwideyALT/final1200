@@ -39,15 +39,7 @@ public final class Vinyl {
         public transient ImageIcon coverIcon; // cached scaled icon
         // add a no arg-constructor
         public Song() {}
-        // full parameterized constructor taking all fields
-        public Song(int id, String title, String artist, String album, String genre,
-                    int bpm, int lengthSeconds, boolean explicit, int rating, String coverPath
-                , double price, int count) {
-            this.id = id; this.title = title; this.artist = artist; this.album = album;
-            this.genre = genre; this.bpm = bpm; this.lengthSeconds = lengthSeconds;
-            this.explicit = explicit; this.rating = rating; this.coverPath = coverPath; this.price = price;
-            this.count = count;
-        }
+
         // create a method that takes in a query string and returns true if this song matches it.
         public boolean matches(String q) {
             String all = (title + " " + artist + " " + album + " " + genre + " " + id + " " + bpm + " " + formatDuration(lengthSeconds)).toLowerCase();

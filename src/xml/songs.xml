@@ -8,10 +8,10 @@
     <bpm>120</bpm>
     <length>250</length>
     <explicit>false</explicit>
-    <rating>3</rating>
+    <rating>4</rating>
     <cover>https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e5/b9/bb/e5b9bb22-c765-a21e-15f0-c116cb974c7b/886446197173.jpg/100x100bb.jpg</cover>
-    <price>0.93</price>
-    <count>0</count>
+    <price>1.93</price>
+    <count>12</count>
   </song>
   <song id="4">
     <title>Blinding Lights</title>
@@ -37,7 +37,7 @@
     <rating>4</rating>
     <cover>https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/83/3a/f7/833af71b-2e0c-3303-24f5-8f5c546c073b/20UMGIM21167.rgb.jpg/100x100bb.jpg</cover>
     <price>1.92</price>
-    <count>0</count>
+    <count>6</count>
   </song>
   <song id="7">
     <title>Don't Start Now</title>
@@ -739,7 +739,7 @@
     <rating>4</rating>
     <cover>https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/63/45/cc/6345cc98-aa83-ad6e-e3c9-1a36ff9838a4/190296614316.jpg/100x100bb.jpg</cover>
     <price>2.05</price>
-    <count>25</count>
+    <count>24</count>
   </song>
   <song id="61">
     <title>Shivers</title>
@@ -1286,5 +1286,31 @@
     <cover/>
     <price>0.0</price>
     <count>10</count>
+  </song>
+  <song id="103">
+    <title>cli</title>
+    <artist>matthew</artist>
+    <album>christmas</album>
+    <genre/>
+    <bpm>1</bpm>
+    <length>0</length>
+    <explicit>true</explicit>
+    <rating>3</rating>
+    <cover/>
+    <price>0.0</price>
+    <count>0</count>
+  </song>
+  <song id="104">
+    <title>0stock</title>
+    <artist>blank</artist>
+    <album/>
+    <genre/>
+    <bpm>0</bpm>
+    <length>0</length>
+    <explicit>false</explicit>
+    <rating>0</rating>
+    <cover/>
+    <price>0.0</price>
+    <count>0</count>
   </song>
 </songs>

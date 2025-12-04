@@ -1,12 +1,17 @@
 // VinylCli.java
+
 import java.io.File;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
-import java.util.Scanner;
+
 
 public class VinylCli {
-    private static final File XML = new File("src/xml/songs.xml");
     private static boolean SHOW_ONLY_IN_STOCK = false; // when true, list shows only items with count > 0
     // method to run the CLI
+    private static final File XML = new File("src/xml/songs.xml");
     public static void run() {
         java.util.Scanner sc = new java.util.Scanner(System.in);
         System.out.println("Vinyl CLI");
@@ -65,8 +70,10 @@ public class VinylCli {
                     System.out.println("  exit                          - quit");
                     System.out.println("  sell <id> <count>             - Decrease inventory for a song by id");
                     System.out.println("  addinv <id> <count>           - increase inventory for a song by id");
-
+                    System.out.println("  logs                          - view activity log");
+                    System.out.println("  exportlogs [file]             - export activity log as CSV");
                     break;
+
                 case "list":
                     list(model);
                     break;
@@ -92,7 +99,7 @@ public class VinylCli {
                     toggleInStockMode(line.substring(7).trim());
                     break;
                 case "save":
-                        File parent = XML.getParentFile();
+                    File parent = XML.getParentFile();
                     if (parent != null) parent.mkdirs();
                     try {
                         Vinyl.XmlStore.save(XML, model.getAll());
@@ -115,11 +122,13 @@ public class VinylCli {
                         int id = Integer.parseInt(parts[1]);
                         int count = Integer.parseInt(parts[2]);
                         addInventory(model, id, count);
+                        
                     } catch (NumberFormatException nfe) {
                         System.out.println("Invalid numbers. Usage: addinv <id> <count>");
                     } catch (Exception e) {
                         System.out.println("Add inventory failed: " + e.getMessage());
                     }
+
                     break;
                 }
 
@@ -139,6 +148,18 @@ public class VinylCli {
                     }
                     break;
                 }
+
+                case "logs":
+                    viewLogs();                    // NEW
+                    break;
+
+                case "exportlogs":
+                    // allow optional path after command
+                    String arg = line.length() > "exportlogs".length()
+                            ? line.substring("exportlogs".length()).trim()
+                            : "";
+                    exportLogsCli(arg);             // NEW
+                    break;
 
                 default:
                     System.out.println("Unknown command. Type 'help' for a list of commands.");
@@ -287,7 +308,15 @@ public class VinylCli {
         }
         s.count = current - count;
         model.songUpdated(idx);
-        System.out.println("Sold " + count + " of \"" + s.title + "\" (id=" + id + "). Remaining: " + s.count + ".");
+
+        String msg = "Sold " + count + " of \"" + s.title + "\" (id=" + id + "). Remaining: " + s.count + ".";
+        String songDisplay = "ID " + s.id + ": " + s.title + " - " + s.artist;
+        double totalPrice = s.price * count;
+
+        // Record CLI sell action in the shared log
+        LogEntry.logEvent(msg, songDisplay, totalPrice);
+
+        System.out.println(msg);
     }
 
     private static void addInventory(Vinyl.SongTableModel model, int id, int count) {
@@ -303,7 +332,15 @@ public class VinylCli {
         Vinyl.Song s = model.getSong(idx);
         s.count += count;
         model.songUpdated(idx);
-        System.out.println("Added " + count + " to \"" + s.title + "\" (id=" + id + "). New total: " + s.count + ".");
+
+        String msg = "Added " + count + " to \"" + s.title + "\" (id=" + id + "). New total: " + s.count + ".";
+        String songDisplay = "ID " + s.id + ": " + s.title + " - " + s.artist;
+        double totalPrice = s.price * count;
+
+        // Record CLI inventory addition in the shared log
+        LogEntry.logEvent(msg, songDisplay);
+
+        System.out.println(msg);
     }
 
     //delete a song from the table
@@ -388,5 +425,71 @@ public class VinylCli {
         for (int i = 0; i < rows.size(); i++)
             if (rows.get(i).id == id) return i;
         return -1;
+    }
+
+    // Export the activity log from the CLI.
+    // Usage: exportlogs [filePath]
+    private static void exportLogsCli(String arg) {
+        if (LogEntry.activityLog.isEmpty()) {
+            System.out.println("No logs to export.");
+            return;
+        }
+
+        File target;
+        if (arg == null || arg.isBlank()) {
+            target = new File("logs_export_cli.csv");
+        } else {
+            target = new File(arg.trim());
+        }
+
+        try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(target)))) {
+            out.println("Time,Song,TotalPrice,Message");
+            for (LogEntry entry : LogEntry.activityLog) {
+                String time = entry.getTimestampText();
+                String song = escapeCsv(entry.getSongTitle());
+                String total = entry.getTotalPrice() == 0.0
+                        ? ""
+                        : String.format("%.2f", entry.getTotalPrice());
+                String msg = escapeCsv(entry.getMessage());
+                out.printf("%s,%s,%s,%s%n", time, song, total, msg);
+            }
+            System.out.println("Logs exported to: " + target.getAbsolutePath());
+        } catch (IOException ex) {
+            System.out.println("Failed to export logs: " + ex.getMessage());
+        }
+    }
+
+    // Minimal CSV escaping helper for CLI export
+    private static String escapeCsv(String s) {
+        if (s == null) return "\"\"";
+        String r = s.replace("\"", "\"\"");
+        return "\"" + r + "\"";
+    }
+
+    // Print the activity log in a simple text table
+    private static void viewLogs() {
+        if (LogEntry.activityLog.isEmpty()) {
+            System.out.println("No log entries.");
+            return;
+        }
+
+        System.out.printf("%-19s | %-40s | %-11s | %s%n",
+                "Time", "Song", "Total Price", "Message");
+        System.out.println("------------------------------------------------------------------------------------------------");
+
+        for (LogEntry entry : LogEntry.activityLog) {
+            String time = entry.getTimestampText();
+            String song = entry.getSongTitle();
+            String total = entry.getTotalPrice() == 0.0
+                    ? ""
+                    : String.format("%.2f", entry.getTotalPrice());
+            String msg = entry.getMessage();
+
+            // Truncate very long song names so columns stay readable
+            String songShort = song.length() > 40 ? song.substring(0, 37) + "..." : song;
+
+            System.out.printf("%-19s | %-40s | %-11s | %s%n",
+                    time, songShort, total, msg);
+        }
     }
 }

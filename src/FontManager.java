@@ -7,7 +7,7 @@ public final class FontManager {
     public static final String SF_PRO_DISPLAY_FAMILY = "SF Pro Display";
 
     // Family name to use for the star font (Wingdine)
-    private static String STAR_FONT_FAMILY = null;
+    private static final String STAR_FONT_FAMILY = null;
 
     private FontManager() {
         // utility class
@@ -46,12 +46,8 @@ public final class FontManager {
 
     // Load wingdine.ttf and remember its family name for later use.
     private static void initStarFont() {
-        return;
     }
 
-    /**
-     * Convenience method to create a SF Pro Display font with given style/size.
-     */
     public static Font sfPro(int style, float size) {
         return new Font(SF_PRO_DISPLAY_FAMILY, style, (int) size);
     }
@@ -60,14 +56,6 @@ public final class FontManager {
         return sfPro(Font.PLAIN, size);
     }
 
-    public static Font sfProBold(float size) {
-        return sfPro(Font.BOLD, size);
-    }
-
-    /**
-     * Font for rating stars, based on the loaded Wingdine font.
-     * Falls back to a logical Dialog font if Wingdine failed to load.
-     */
     public static Font starFont(float size) {
         if (STAR_FONT_FAMILY != null) {
             return new Font(STAR_FONT_FAMILY, Font.PLAIN, (int) size);

@@ -1,5 +1,8 @@
+import javax.imageio.ImageIO;
 import javax.swing.AbstractCellEditor;
 import javax.swing.*;
+import javax.swing.Timer;
+import javax.swing.border.AbstractBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -9,10 +12,13 @@ import javax.swing.table.*;
 import javax.swing.text.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.awt.image.ConvolveOp;
+import java.awt.image.Kernel;
 import java.io.*;
+import java.net.URL;
 import java.util.*;
+import java.util.List;
 
 // Swing frame using Vinyl (domain) and VinylUiKit (UI widgets).
 public class VinylGui extends JFrame {
@@ -21,8 +27,79 @@ public class VinylGui extends JFrame {
     public static void launch() {
         SwingUtilities.invokeLater(() -> {
             VinylUiKit.setSystemDefaults();
-            new VinylGui().setVisible(true);
+
+            // 1) Show a small splash window right away
+            JWindow splash = createSplashWindow();
+            splash.setVisible(true);
+
+            // 2) Build the real UI in the background so the splash stays responsive
+            SwingWorker<VinylGui, Void> worker = new SwingWorker<>() {
+                @Override
+                protected VinylGui doInBackground() {
+                    // Heavy construction work happens here
+                    return new VinylGui();
+                }
+
+                @Override
+                protected void done() {
+                    try {
+                        VinylGui gui = get();
+                        // 3) Hide splash and show the main window
+                        splash.dispose();
+                        gui.setVisible(true);
+                    } catch (Exception ex) {
+                        splash.dispose();
+                        ex.printStackTrace();
+                        JOptionPane.showMessageDialog(
+                                null,
+                                "Failed to start Music Library:\n" + ex.getMessage(),
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+                    }
+                }
+            };
+            worker.execute();
         });
+    }
+
+    private static JWindow createSplashWindow() {
+        JWindow w = new JWindow();
+        w.setBackground(new Color(0, 0, 0, 0)); // transparent window background
+
+        JPanel content = new JPanel(new BorderLayout());
+        content.setBorder(new EmptyBorder(24, 32, 24, 32));
+        content.setBackground(VinylUiKit.BG);
+
+        JLabel title = new JLabel("Music Library");
+        title.setForeground(VinylUiKit.FG);
+        title.setFont(title.getFont().deriveFont(Font.BOLD, 18f));
+
+        JLabel subtitle = new JLabel("Loading songs…");
+        subtitle.setForeground(VinylUiKit.SUBFG);
+        subtitle.setBorder(new EmptyBorder(8, 0, 0, 0));
+
+        JPanel textPanel = new JPanel();
+        textPanel.setOpaque(false);
+        textPanel.setLayout(new BoxLayout(textPanel, BoxLayout.Y_AXIS));
+        textPanel.add(title);
+        textPanel.add(subtitle);
+
+        JProgressBar bar = new JProgressBar();
+        bar.setIndeterminate(true);
+        bar.setBorder(new EmptyBorder(12, 0, 0, 0));
+
+        JPanel center = new JPanel();
+        center.setOpaque(false);
+        center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
+        center.add(textPanel);
+        center.add(bar);
+
+        content.add(center, BorderLayout.CENTER);
+        w.setContentPane(content);
+        w.pack();
+        w.setLocationRelativeTo(null);
+        return w;
     }
 
     // ---------- Colors (via static import-like referencing) ----------
@@ -37,17 +114,17 @@ public class VinylGui extends JFrame {
 
 
 
-    private JTable table;
-    private Vinyl.SongTableModel model;
-    private TableRowSorter<Vinyl.SongTableModel> sorter;
+    private final JTable table;
+    private final Vinyl.SongTableModel model;
+    private final TableRowSorter<Vinyl.SongTableModel> sorter;
     private JTextField searchField;
-    private ColumnManager columnManager;
+    private final ColumnManager columnManager;
     private boolean autoHideZero = false; // auto-hide rows with count==0
 
     // Toast notification components
     private JPanel toastPanel;
     private JLabel toastLabel;
-    private javax.swing.Timer toastTimer;
+    private Timer toastTimer;
     private int toastTargetY;
     private int toastState = 0; // 0=hidden, 1=sliding down, 2=visible, 3=sliding up
 
@@ -69,7 +146,7 @@ public class VinylGui extends JFrame {
         File xmlFile = new File("src/xml/songs.xml");
         if (xmlFile.exists()) {
             try {
-                java.util.List<Vinyl.Song> songs = Vinyl.XmlStore.load(xmlFile);
+                List<Vinyl.Song> songs = Vinyl.XmlStore.load(xmlFile);
                 model.setSongs(songs);
             } catch (Exception ex) {
                 // Non-fatal: keep the seeded rows; show a brief error
@@ -137,10 +214,10 @@ public class VinylGui extends JFrame {
         table.getColumnModel().getColumn(9).setCellRenderer(new VinylUiKit.RatingRenderer());
         table.getColumnModel().getColumn(9).setCellEditor(new VinylUiKit.RatingEditor());
         // Price (10) and Count (11) use default renderers
-        table.getColumnModel().getColumn(10).setCellRenderer(new VinylGui.PriceRenderer());
-        table.getColumnModel().getColumn(11).setCellRenderer(new VinylGui.CountRenderer());
-        table.getColumnModel().getColumn(12).setCellRenderer(new VinylGui.ActionsRenderer());
-        table.getColumnModel().getColumn(12).setCellEditor(new VinylGui.ActionsEditor());
+        table.getColumnModel().getColumn(10).setCellRenderer(new PriceRenderer());
+        table.getColumnModel().getColumn(11).setCellRenderer(new CountRenderer());
+        table.getColumnModel().getColumn(12).setCellRenderer(new ActionsRenderer());
+        table.getColumnModel().getColumn(12).setCellEditor(new ActionsEditor());
         // Track hover for actions cell AND for whole-row band shading (on hover, not click)
         table.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
@@ -219,6 +296,31 @@ public class VinylGui extends JFrame {
         initToast();
     }
 
+    public class TranslucentPopup extends JPopupMenu {
+
+        {
+            // need to disable that to work
+            setLightWeightPopupEnabled(false);
+        }
+
+        @Override
+        public void setVisible(boolean visible) {
+            if (visible == isVisible())
+                return;
+            super.setVisible(visible);
+            if (visible) {
+                // attempt to set tranparency
+                try {
+                    Window w = SwingUtilities.getWindowAncestor(this);
+                    w.setOpacity(0.90F);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
     // Create the toast panel once and add it to the frame's layered pane
     private void initToast() {
         if (toastPanel != null) return;
@@ -227,18 +329,30 @@ public class VinylGui extends JFrame {
             @Override
             protected void paintComponent(Graphics g) {
                 Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(new Color(36, 36, 36, 240));
-                int arc = 14;
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
+                setOpaque(false);
+
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                        RenderingHints.VALUE_ANTIALIAS_ON);
+
+                int w = getWidth();
+                int h = getHeight();
+                int arc = 18;
+
+                // Frosted glass fill
+                Color fill = new Color(255, 255, 255, 20); // increase alpha for stronger white
+                g2.setColor(fill);
+                g2.fillRoundRect(0, 0, w, h, arc, arc);
+
                 g2.dispose();
                 super.paintComponent(g);
             }
         };
+
         toastPanel.setOpaque(false);
         toastPanel.setBorder(new EmptyBorder(8, 16, 8, 16));
 
         toastLabel = new JLabel();
+// Dark text works better on light glass
         toastLabel.setForeground(FG);
         toastLabel.setFont(toastLabel.getFont().deriveFont(Font.PLAIN, 13f));
         toastPanel.add(toastLabel, BorderLayout.CENTER);
@@ -246,8 +360,8 @@ public class VinylGui extends JFrame {
         JLayeredPane lp = getLayeredPane();
         int width = getWidth();
         int height = 40;
-        int x = (width - 320) / 2; // fixed width area, centered
-        toastTargetY = 16;         // where it rests when visible
+        int x = (width - 320) / 2;
+        toastTargetY = 16;
         toastPanel.setBounds(x, -height, 320, height);
         lp.add(toastPanel, JLayeredPane.POPUP_LAYER);
         toastPanel.setVisible(false);
@@ -255,6 +369,7 @@ public class VinylGui extends JFrame {
 
     // Show a sliding toast at the top of the main window
     private void showToast(String message) {
+        // Do NOT log here any more. Logging is done explicitly at each action.
         initToast();
         toastLabel.setText(message);
 
@@ -271,7 +386,7 @@ public class VinylGui extends JFrame {
         toastPanel.setVisible(true);
         toastState = 1; // start sliding down
 
-        toastTimer = new javax.swing.Timer(16, new ActionListener() {
+        toastTimer = new Timer(16, new ActionListener() {
             long visibleStart = 0;
 
             @Override
@@ -305,6 +420,7 @@ public class VinylGui extends JFrame {
         });
         toastTimer.start();
     }
+
 
     private JMenuBar buildMenuBar() {
         // Custom menu bar with rounded background (no border)
@@ -357,7 +473,164 @@ public class VinylGui extends JFrame {
         mode.add(inStockOnly);
         bar.add(mode);
 
+        // Logs menu to review and export activity log
+        JMenu logs = createTopMenu("Logs");
+        JMenuItem viewLogs = new JMenuItem("View Logs");
+        JMenuItem exportLogs = new JMenuItem("Export Logs...");
+        viewLogs.addActionListener(e -> showLogDialog());
+        exportLogs.addActionListener(e -> exportLogsToFile());
+        logs.add(viewLogs);
+        logs.add(exportLogs);
+        bar.add(logs);
+
         return bar;
+    }
+    
+    private static final class LogHeaderRenderer extends DefaultTableCellRenderer {
+        LogHeaderRenderer() {
+            setHorizontalAlignment(LEFT);
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(
+                JTable table, Object value, boolean isSelected,
+                boolean hasFocus, int row, int column) {
+
+            super.getTableCellRendererComponent(table, value, false, false, row, column);
+            setOpaque(true);
+            setBackground(BG);       // blend with dialog background
+            setForeground(FG);       // use foreground text color
+            setBorder(new EmptyBorder(6, 10, 6, 10));
+            return this;
+        }
+    }
+
+
+    // Table model that exposes the shared activity log as rows
+    private final class LogTableModel extends AbstractTableModel {
+        private final String[] columns = {"Time", "Song", "Total Price", "Message"};
+
+        @Override
+        public int getRowCount() {
+            return LogEntry.activityLog.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return columns.length;
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            return columns[column];
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            LogEntry entry = LogEntry.activityLog.get(rowIndex);
+            return switch (columnIndex) {
+                case 0 -> entry.getTimestampText();
+                case 1 -> entry.getSongTitle();
+                case 2 -> entry.getTotalPrice() == 0.0
+                        ? ""
+                        : String.format("%.2f", entry.getTotalPrice());
+                case 3 -> entry.getMessage();
+                default -> "";
+            };
+        }
+
+        @Override
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return false;
+        }
+    }
+
+    // Show a dialog containing the activity log in a simple table
+    private void showLogDialog() {
+        JDialog dlg = new JDialog(this, "Activity Log", true);
+        dlg.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        dlg.setLayout(new BorderLayout());
+        dlg.getContentPane().setBackground(BG);
+
+        LogTableModel logModel = new LogTableModel();
+        JTable logTable = new JTable(logModel);
+        logTable.setFillsViewportHeight(true);
+        logTable.setBackground(BG);
+        logTable.setForeground(FG);
+        logTable.setGridColor(new Color(60, 60, 60));
+        logTable.setRowHeight(24);
+
+        JTableHeader header = logTable.getTableHeader();
+        header.setBackground(BG);
+        header.setForeground(FG);
+        header.setReorderingAllowed(false);
+        header.setDefaultRenderer(new LogHeaderRenderer());
+
+        // Use the same rounded scroll pane + minimal scrollbars as the main view
+        JScrollPane scrollPane = new VinylUiKit.RoundedScrollPane(logTable, 12);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+        scrollPane.getViewport().setBackground(BG);
+        if (scrollPane.getColumnHeader() != null) {
+            scrollPane.getColumnHeader().setOpaque(false);
+        }
+
+        scrollPane.getVerticalScrollBar().setUI(new VinylUiKit.MinimalScrollBarUI());
+        scrollPane.getHorizontalScrollBar().setUI(new VinylUiKit.MinimalScrollBarUI());
+        scrollPane.getVerticalScrollBar().setOpaque(false);
+        scrollPane.getHorizontalScrollBar().setOpaque(false);
+
+        dlg.add(scrollPane, BorderLayout.CENTER);
+
+        JPanel bottom = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        bottom.setBackground(BG);
+        JButton closeBtn = VinylUiKit.grayButton("Close");
+        closeBtn.addActionListener(e -> dlg.dispose());
+        bottom.add(closeBtn);
+
+        dlg.add(bottom, BorderLayout.SOUTH);
+        dlg.setSize(900, 400);
+        dlg.setLocationRelativeTo(this);
+        dlg.setVisible(true);
+    }
+
+    // Export the activity log to a user-chosen file (CSV-style text)
+    private void exportLogsToFile() {
+        if (LogEntry.activityLog.isEmpty()) {
+            showToast("No logs to export");
+            return;
+        }
+
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Export Logs");
+        if (chooser.showSaveDialog(this) != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
+
+        File f = chooser.getSelectedFile();
+        try (PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(f)))) {
+            out.println("Time,Song,TotalPrice,Message");
+            for (LogEntry entry : LogEntry.activityLog) {
+                String time = entry.getTimestampText();
+                String song = escapeCsvForExport(entry.getSongTitle());
+                String total = entry.getTotalPrice() == 0.0
+                        ? ""
+                        : String.format("%.2f", entry.getTotalPrice());
+                String msg = escapeCsvForExport(entry.getMessage());
+                out.printf("%s,%s,%s,%s%n", time, song, total, msg);
+            }
+            showToast("Logs exported to " + f.getName());
+        } catch (IOException ex) {
+            showError("Failed to export logs: " + ex.getMessage());
+        }
+    }
+
+    // Simple CSV helper for export (separate from LogEntry to keep GUI independent)
+    private String escapeCsvForExport(String s) {
+        if (s == null) return "\"\"";
+        String result = s.replace("\"", "\"\"");
+        return "\"" + result + "\"";
     }
 
     public void setAutoHideZeroCount(boolean on) {
@@ -368,6 +641,7 @@ public class VinylGui extends JFrame {
 
     private JMenu buildViewMenu() {
         JMenu view = createTopMenu("View");
+        //VinylUiKit.stylePopup(view.getPopupMenu());
         String[] names = {"ID", "Cover", "Title", "Artist", "Album", "Genre", "BPM", "Length", "Explicit", "Rating", "Price", "Count", "Actions"};
         for (int i = 0; i < names.length; i++) {
             final int modelIndex = i;
@@ -376,7 +650,6 @@ public class VinylGui extends JFrame {
             view.add(item);
         }
         // Style the View menu popup
-        VinylUiKit.stylePopup(view.getPopupMenu());
         return view;
     }
 
@@ -392,7 +665,7 @@ public class VinylGui extends JFrame {
                 setRolloverEnabled(true);
                 setBorder(new EmptyBorder(4, 10, 4, 10));
                 // Style this menu’s popup (File/Mode/View)
-                VinylUiKit.stylePopup(getPopupMenu());
+                //VinylUiKit.stylePopup(getPopupMenu());
                 addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseEntered(MouseEvent e) {
@@ -415,7 +688,7 @@ public class VinylGui extends JFrame {
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
                 boolean over = hover || getModel().isRollover() || getModel().isArmed();
                 if (over) {
-                    g2.setColor(new Color(36, 36, 36)); // darker hover shade
+                    g2.setColor(Color.darkGray); // darker hover shade
                     g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
                 }
                 g2.dispose();
@@ -426,35 +699,6 @@ public class VinylGui extends JFrame {
     }
 
     // Menu bar used inside the Song Properties dialog, visually identical to the main menu bar
-    private JMenuBar buildDialogMenuBar() {
-        JMenuBar bar = new JMenuBar() {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                int arc = 14;
-                int pad = 2;
-                g2.setColor(HEADER_BG);
-                g2.fillRoundRect(0, pad, getWidth(), getHeight() - pad, arc, arc);
-                g2.dispose();
-            }
-        };
-        bar.setOpaque(false);
-        bar.setBorder(new EmptyBorder(6, 8, 6, 8));
-        bar.setForeground(SUBFG);
-
-
-        JMenuItem save = new JMenuItem("Save");
-        JMenuItem cancel = new JMenuItem("Cancel");
-        save.addActionListener(e -> {
-            // Try to trigger the dialog's Save button by dispatching to the default button if present
-            JRootPane rp = getRootPane();
-            if (rp != null && rp.getDefaultButton() != null) rp.getDefaultButton().doClick();
-        });
-        cancel.addActionListener(e -> dispose());
-
-        return bar;
-    }
 
     private JPanel buildTopBar() {
         JPanel top = new JPanel(new BorderLayout());
@@ -496,7 +740,7 @@ public class VinylGui extends JFrame {
 
     private void applyFilter() {
         String q = searchField.getText();
-        java.util.List<RowFilter<Vinyl.SongTableModel, Integer>> filters = new ArrayList<>();
+        List<RowFilter<Vinyl.SongTableModel, Integer>> filters = new ArrayList<>();
 
         if (q != null && !q.trim().isEmpty()) {
             String s = q.trim().toLowerCase();
@@ -578,7 +822,7 @@ public class VinylGui extends JFrame {
         if (fc.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File f = fc.getSelectedFile();
             try {
-                java.util.List<Vinyl.Song> songs = Vinyl.XmlStore.load(f);
+                List<Vinyl.Song> songs = Vinyl.XmlStore.load(f);
                 model.setSongs(songs);
             } catch (Exception ex) {
                 showError("Failed to import XML: " + ex.getMessage());
@@ -672,8 +916,6 @@ public class VinylGui extends JFrame {
         }
     }
 
-
-
     class ActionsEditor extends AbstractCellEditor implements TableCellEditor {
         private final JPanel holder = new JPanel(new GridBagLayout());
         private final JButton menuBtn = makeKebabButton();
@@ -686,9 +928,7 @@ public class VinylGui extends JFrame {
                 if (editingRow < 0) return;
                 int modelRow = table.convertRowIndexToModel(editingRow);
                 Vinyl.Song s = model.getSong(modelRow);
-                JPopupMenu.setDefaultLightWeightPopupEnabled(true);
                 JPopupMenu popup = buildActionsPopup(s, modelRow);
-                //popup.setLightWeightPopupEnabled(true);
                 popup.show(menuBtn, 0, menuBtn.getHeight());
             });
         }
@@ -700,7 +940,7 @@ public class VinylGui extends JFrame {
                     int modelRow = table.convertRowIndexToModel(editingRow);
                     Vinyl.Song s = model.getSong(modelRow);
                     JPopupMenu popup = buildActionsPopup(s, modelRow);
-                    popup.setLightWeightPopupEnabled(true);
+                    //popup.setLightWeightPopupEnabled(true);
                     popup.show(menuBtn, 0, menuBtn.getHeight());
                 }
             });
@@ -746,10 +986,9 @@ public class VinylGui extends JFrame {
 
 
     private JPopupMenu buildActionsPopup(Vinyl.Song s, int modelRow) {
-        // Use the same styled popup as the main menus
-        JPopupMenu popup = new JPopupMenu();
-        popup.setLightWeightPopupEnabled(true);
-        VinylUiKit.stylePopup(popup);
+        JPopupMenu popup = new TranslucentPopup();
+        //VinylUiKit.stylePopup(popup);
+        //popup.setLightWeightPopupEnabled(true);
 
         JMenuItem props = new JMenuItem("Properties...");
         props.addActionListener(e -> {
@@ -767,10 +1006,14 @@ public class VinylGui extends JFrame {
             Integer qty = promptAddQuantity();
             if (qty == null || qty <= 0) return;
             s.count += qty;
-            model.songUpdated(modelRow); // refresh + autosave via listeners
-            showToast("Added " + qty + " to inventory");
-        });
+            model.songUpdated(modelRow);
 
+            String songDisplay = "ID " + s.id + ": " + s.title + " - " + s.artist;
+            String msg = "Added " + qty + " to inventory";
+
+            LogEntry.logEvent(msg, songDisplay);
+            showToast(msg);
+        });
 
         JMenuItem sell = new JMenuItem("Sell");
         sell.addActionListener(e -> {
@@ -783,8 +1026,7 @@ public class VinylGui extends JFrame {
             }
             while (true) {
                 Integer qty = promptSellQuantityUnbounded(s.count);
-                if (qty == null) return;
-                if (qty <= 0) return;
+                if (qty == null || qty <= 0) return;
 
                 if (qty > s.count) {
                     int choice = showOverSellDialog(qty, s.count);
@@ -799,33 +1041,42 @@ public class VinylGui extends JFrame {
 
                 s.count -= qty;
                 model.songUpdated(modelRow);
-                showToast("Sold " + qty + " item" + (qty == 1 ? "" : "s"));
+
+                // Build display fields for the log row
+                String songDisplay = "ID " + s.id + ": " + s.title + " - " + s.artist;
+                double totalPrice = s.price * qty;
+                String msg = "Sold " + qty + " item" + (qty == 1 ? "" : "s");
+
+                // Single rich log entry for this sell action
+                LogEntry.logEvent(msg, songDisplay, totalPrice);
+
+                // Toast only shows the message
+                showToast(msg);
                 return;
             }
         });
 
-
         JMenuItem delete = new JMenuItem("Delete");
+
         delete.addActionListener(e -> {
             if (table.isEditing() && table.getCellEditor() != null) {
                 table.getCellEditor().stopCellEditing();
             }
             model.removeAt(modelRow);
             showToast("Song deleted");
+
         });
 
-
+        // add after creation
         popup.add(props);
         popup.addSeparator();
         popup.add(addInv);
         popup.add(sell);
         popup.addSeparator();
         popup.add(delete);
+
         return popup;
     }
-
-
-
 
     private JButton makeKebabButton() {
         JButton b = new JButton() {
@@ -1125,7 +1376,38 @@ public class VinylGui extends JFrame {
         PropertiesDialog(Frame owner, Vinyl.Song song, boolean isNew) {
             super(owner, isNew ? "Add Song" : "Song Properties", true);
             this.song = song; this.selectedCoverPath = song.coverPath;
-            setSize(720, 540); setLocationRelativeTo(owner); setLayout(new BorderLayout());
+
+            // Make the window borderless and transparent
+            setUndecorated(true);
+            setOpacity(0.95f);
+            setBackground(new Color(0, 0, 0, 0)); // fully transparent window
+
+            // Card panel that stays opaque on top of the transparent window
+            JPanel card = new JPanel(new BorderLayout());
+            card.setOpaque(false);
+            card.setBorder(new EmptyBorder(10, 10, 10, 10)); // outer margin
+
+            JPanel cardInner = new JPanel(new BorderLayout()) {
+                @Override
+                protected void paintComponent(Graphics g) {
+                    Graphics2D g2 = (Graphics2D) g.create();
+                    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                    int arc = 18;
+                    g2.setColor(BG); // solid dialog background
+                    g2.fillRoundRect(0, 0, getWidth(), getHeight(), arc, arc);
+                    g2.dispose();
+                    super.paintComponent(g);
+                }
+            };
+            cardInner.setOpaque(false);
+            cardInner.setBorder(new EmptyBorder(16, 16, 16, 16));
+            card.add(cardInner, BorderLayout.CENTER);
+
+            setContentPane(cardInner); // everything else goes into the rounded card
+
+            setSize(720, 540);
+            setLocationRelativeTo(owner);
+            setLayout(new BorderLayout());
             // Remove the top bar above tabs
             // setJMenuBar(buildDialogMenuBar());
 
@@ -1158,8 +1440,9 @@ public class VinylGui extends JFrame {
             });
             actions.add(cancel);
             actions.add(save);
-            add(tabs, BorderLayout.CENTER);
-            add(actions, BorderLayout.SOUTH);
+
+            cardInner.add(tabs, BorderLayout.CENTER);
+            cardInner.add(actions, BorderLayout.SOUTH);
         }
 
 
@@ -1291,8 +1574,8 @@ public class VinylGui extends JFrame {
 
                 // If artwork exists, show a small menu for change/remove
                 // Use rounded popup directly instead of stylePopup
-                JPopupMenu menu = new VinylUiKit.RoundedPopupMenu();
-                menu.setLightWeightPopupEnabled(true);
+                JPopupMenu menu = new TranslucentPopup();
+                //menu.setLightWeightPopupEnabled(true);
 
 
                 JMenuItem change = new JMenuItem("Change Artwork...");
@@ -1324,6 +1607,8 @@ public class VinylGui extends JFrame {
             }
         }
 
+
+
         private void updateCoverPreview() {
             final int PREVIEW_SIZE = 300;
             ImageIcon icon = null;
@@ -1339,16 +1624,16 @@ public class VinylGui extends JFrame {
                             urlString = urlString.substring(0, lastSlash) + "/300x300bb.jpg";
                         }
 
-                        java.net.URL url = new java.net.URL(urlString);
-                        java.awt.image.BufferedImage img = javax.imageio.ImageIO.read(url);
+                        URL url = new URL(urlString);
+                        BufferedImage img = ImageIO.read(url);
                         if (img != null) {
                             Image scaled = img.getScaledInstance(PREVIEW_SIZE, PREVIEW_SIZE, Image.SCALE_SMOOTH);
                             icon = new ImageIcon(scaled);
                         }
                     } else {
                         // Local file path
-                        java.io.File f = new java.io.File(selectedCoverPath);
-                        java.awt.image.BufferedImage img = javax.imageio.ImageIO.read(f);
+                        File f = new File(selectedCoverPath);
+                        BufferedImage img = ImageIO.read(f);
                         if (img != null) {
                             Image scaled = img.getScaledInstance(PREVIEW_SIZE, PREVIEW_SIZE, Image.SCALE_SMOOTH);
                             icon = new ImageIcon(scaled);
@@ -1359,14 +1644,12 @@ public class VinylGui extends JFrame {
                 }
             }
 
-            // 2) If that didn't work, fall back to the existing coverIcon (table thumbnail), scaled up
             if (icon == null && song.coverIcon != null) {
                 Image img = song.coverIcon.getImage();
                 Image scaled = img.getScaledInstance(PREVIEW_SIZE, PREVIEW_SIZE, Image.SCALE_SMOOTH);
                 icon = new ImageIcon(scaled);
             }
 
-            // 3) Final fallback: placeholder
             if (icon == null) {
                 icon = Vinyl.Song.placeholderIcon(PREVIEW_SIZE, PREVIEW_SIZE);
             }
@@ -1510,11 +1793,10 @@ public class VinylGui extends JFrame {
         }
     }
 
-
     // Clickable star bar for dialog
     static class StarBar extends JPanel {
         private int value;
-        private final java.util.List<JLabel> stars = new ArrayList<>();
+        private final List<JLabel> stars = new ArrayList<>();
 
         StarBar(int initial) {
             super(new FlowLayout(FlowLayout.LEFT, 4, 0));
